@@ -1,25 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Persons from "./Components/Persons";
 import FormPerson from "./Components/Form";
 import Filter from "./Components/Filter";
+import  personServices from "../services/index";
+
+
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456", id: 1 },
-    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
-    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
-    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterPerson, setfilterPerson] = useState("");
-  //auxiliar state
-  const [filteredPersons, setFilteredPerson] = useState([...persons]);
+  const [filteredPersons, setFilteredPerson] = useState([]);
+
+ 
+//fetching wit axios
+useEffect(() => {
+  personServices
+    .getAll()
+    .then((response) => setPersons(response))
+    .catch((err) => alert(err));
+}, []);
 
   const handleFilterPerson = (e) => {
     const newFilter = e.target.value.toLowerCase();
     setfilterPerson(newFilter);
-    //searh for that person in persons array
+
     setFilteredPerson(
       newFilter
         ? persons.filter((person) =>
@@ -28,6 +34,7 @@ const App = () => {
         : [...persons]
     );
   };
+
 
   const handleChange = (e) => {
     setNewName(e.target.value);
@@ -45,11 +52,26 @@ const App = () => {
       alert(`${newName} is already added`);
       return;
     }
-    const updatedPersons = [...persons, { name: newName, number: newNumber }];
-    setPersons(updatedPersons);
-    // Update filteredPersons with the latest persons
-    setFilteredPerson(updatedPersons);
+
+    const newPersonCreated = { name: newName, number: newNumber };
+
+    personServices
+      .create(newPersonCreated)
+      .then((response) => setPersons([...persons, response]))
+      .catch((err) => alert(err));
   };
+
+  const handleDelete = (id) => {
+    personServices.deletePerson(id)
+    .then(() => setPersons((person) => {
+       const newDate = person.filter(p =>  p.id !== id);
+       return newDate;
+   
+       
+    } ))
+    .catch(err => console.log(err, " error"));
+
+  }
 
   return (
     <div>
@@ -65,7 +87,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons persons={persons} filtradas={filteredPersons} handleDelete={handleDelete} />
     </div>
   );
 };
