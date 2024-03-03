@@ -7,17 +7,38 @@ function App() {
   const [matches, setMaches] = useState();
   const [wholeCountry, setWholeCountry] = useState();
   const [country, setCountry] = useState();
+  const [countryWeather, setCountryWeather] = useState();
+  // for testing the icon 
+  const [icon,setIcon] = useState();
 
   //end point para todos los countries
   const ALLCOUNTRIES = "https://studies.cs.helsinki.fi/restcountries/api/all";
+
+  const api_key = import.meta.env.VITE_SOME_KEY;
+
 
   useEffect(() => {
     axios.get(ALLCOUNTRIES).then((res) => {
       setWholeCountry(res.data);
       const allCountries = res.data.map((c) => c.name.common);
       setCountries(allCountries);
-    });
+    })
+    .catch(err => console.error(err.message))
   }, []);
+
+
+
+  useEffect(() => {
+
+    if(country) {
+      let coordinates = country.latlng;
+      const COUNTRYWEATHER = `https://api.openweathermap.org/data/2.5/weather?lat=${coordinates[0]}.17&lon=${coordinates[1]}&appid=${api_key}`;
+
+      axios.get(COUNTRYWEATHER)
+      .then(res => setCountryWeather(res.data))
+      .catch(err =>  console.error(err.message))
+    }
+  },[country])
 
   //handlers
   const handleChange = (e) => {
@@ -41,7 +62,6 @@ function App() {
     }
   };
 
-  console.log(country)
 
 
   return (
@@ -53,7 +73,7 @@ function App() {
       {switchComponent(matches, wholeCountry, setCountry)}
     
       <SingleCountry country={country} />
-      <WeatherComponent country={country} />
+      <WeatherComponent country={country} countryWeather={countryWeather} />
 
     </>
   );
@@ -63,16 +83,26 @@ export default App;
 
 //  components
 
-const WeatherComponent = ({country}) => {
-
-  if(!country) {
-    return; 
+const WeatherComponent = ({ country, countryWeather }) => {
+  if (!country) {
+    return;
   }
-  return <>
-    <h4>Wather in country name </h4>
-  </>
 
-}
+  return (
+    <>
+      <h4>Wather in country name </h4>
+      <p> temperature {countryWeather.main.temp} Celsius</p>
+      <img
+        src={`http://openweathermap.org/img/wn/${countryWeather.weather[0].icon}.png`}
+        alt="weather"
+        width={80}
+        height={80}
+        
+      />
+      <p>wind {countryWeather.wind.speed} m/s</p>
+    </>
+  );
+};
 
 const SingleCountry = ({ country }) => {
   // little check in order to be able to destructure 
