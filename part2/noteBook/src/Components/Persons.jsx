@@ -5,7 +5,7 @@ const Persons = ({ persons, filtradas, handleDelete }) => {
 
   if (filtradas.length > 0) {
     toRender = filtradas?.map((person) => (
-      <div style={{ display: "flex" }}>
+      <div key={person.id} style={{ display: "flex" }}>
         <p key={person.name}>
           {person.name} {person.number}{" "}
         </p>
@@ -19,7 +19,7 @@ const Persons = ({ persons, filtradas, handleDelete }) => {
     ));
   } else {
     toRender = persons?.map((person) => (
-      <div style={{ display: "flex" }}>
+      <div key={person.id} style={{ display: "flex" }}>
         <p key={person.name}>
           {person.name} {person.number}
         </p>
