@@ -22,31 +22,78 @@ const favoriteBlog = (blogsList) => {
   return mostLikedBlog;
 };
 
+
+
 const mostBlogs = (blogsList) => {
-  let counter = 0;
-  let author;
+  let blogCounts = {};
 
-  for (let i = 0; i < blogsList.length - 1; i++) {
+  for (let i = 0; i < blogsList.length; i++) {
     const currentAuthor = blogsList[i]?.author;
-    const nextAuthor = blogsList[i + 1]?.author;
 
-    if (currentAuthor === nextAuthor) {
-      counter = counter + 1;
-      author = blogsList[i];
+    if (currentAuthor) {
+      if (blogCounts[currentAuthor]) {
+        blogCounts[currentAuthor]++;
+      } else {
+        blogCounts[currentAuthor] = 1;
+      }
     }
+  }
 
+  // Find the author with the most blogs
+  let maxAuthor = "";
+  let maxBlogs = 0;
+
+  for (const author in blogCounts) {
+    if (blogCounts[author] > maxBlogs) {
+      maxAuthor = author;
+      maxBlogs = blogCounts[author];
+    }
   }
 
   return {
-    author: author.author,
-    blogs: counter,
+    author: maxAuthor,
+    blogs: maxBlogs,
   };
 };
+
+
+const mostLikes = (blogList) => {
+  let likesByAuthor = {};
+
+  blogList.forEach((blog) => {
+    const author = blog.author;
+    const likes = blog.likes;
+
+    if (!likesByAuthor[author]) {
+      likesByAuthor[author] = likes;
+    } else {
+      likesByAuthor[author] += likes;
+    }
+  });
+
+  let maxAuthor = "";
+  let maxLikes = 0;
+
+  for (const author in likesByAuthor) {
+    if (likesByAuthor[author] > maxLikes) {
+      maxAuthor = author;
+      maxLikes = likesByAuthor[author];
+    }
+  }
+
+  return {
+    author: maxAuthor,
+    likes: maxLikes,
+  };
+};
+
+
 
 
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
