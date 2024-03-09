@@ -157,7 +157,7 @@ useEffect(() => {
         setPersons([...persons, response])
       })
       .catch((err) => {
-        setErrorMessage(`${err.message}`);
+        setErrorMessage(`${err.response.data.error}`);
         setIsError(true);
         setTimeout(() => {
           setErrorMessage(null)
