@@ -18,14 +18,26 @@ blogRouter.get("/", async (req, res, next) => {
   }
 });
 
-blogRouter.post("/", (req, res) => {
-  const blog = new Blog(req.body);
-  blog
-    .save()
-    .then((blogCreated) => {
-      res.status(201).json(blogCreated);
-    })
-    .catch((err) => console.log(err));
+blogRouter.post("/", async (req, res, next) => {
+  try {
+    const blog = new Blog(req.body);
+    const savedBlog = await blog.save(blog);
+    res.status(201).json(savedBlog);
+  } catch (error) {
+    next(error);
+  }
 });
+
+
+blogRouter.delete("/:id", async (req, res) => {
+  try {
+    const author = await Blog.findByIdAndDelete(req.params.id);
+    res.status(200).json(author);
+   } catch (err) {
+    res.status(500).json({
+     message: err.message,
+    });
+   }
+})
 
 module.exports = blogRouter;

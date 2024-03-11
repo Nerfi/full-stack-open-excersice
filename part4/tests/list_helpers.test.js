@@ -319,6 +319,40 @@ describe("testing HTTP methods of API", () => {
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(blogs.length);
   });
+
+  test("verify id is presented in object returned ", async () => {
+    const response = await api.get("/api/blogs");
+
+    expect(response.body[0].id).toBeDefined();
+  });
+
+  test("test we can crete a new blog in DB and its present", async () => {
+    const newBlogToTest = {
+      title: "juan testing",
+      author: "Juan paredes",
+      url: "https://reactpatterns.com/",
+      likes: 7,
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(newBlogToTest)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const blogsFind = await BLOG.find({});
+
+    expect(blogsFind).toHaveLength(blogs.length + 1);
+
+    const contents = blogsFind.map((blog) => blog.title);
+    expect(contents).toContain("juan testing");
+
+   
+  });
+
+ 
+
+
 });
 
 afterAll(() => {
