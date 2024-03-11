@@ -5,15 +5,17 @@ const blogList = require("../utils/list_helper");
 //app.use("/api/blogs", blogRoutes); esta linea ki que hace es poner /api/blogs como prefijo de cualquiera
 // de nuestras rutas
 
-blogRouter.get("/", (req, res) => {
-  Blog.find({})
-    .then((response) => 
-   
-    res.json(response)
-    )
-   
-    .catch((err) => console.log(err));
-
+blogRouter.get("/", async (req, res, next) => {
+  try {
+    const allBlogs = await Blog.find({});
+    if (allBlogs) {
+      res.json(allBlogs);
+    } else {
+      res.status(404).end();
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 blogRouter.post("/", (req, res) => {
