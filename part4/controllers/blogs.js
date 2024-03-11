@@ -19,18 +19,56 @@ blogRouter.get("/", async (req, res, next) => {
 });
 
 blogRouter.post("/", async (req, res, next) => {
-
   //if not likes default to 0
-  const {title, author, url, likes = 0} = req.body;
+  const { title, author, url, likes = 0 } = req.body;
   try {
     if (!req.body.title || !req.body.url) {
       res.status(400).end();
     }
-    const blog = new Blog({title, author,url,likes});
+    const blog = new Blog({ title, author, url, likes });
 
     const savedBlog = await blog.save(blog);
 
     res.status(201).json(savedBlog);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+blogRouter.put("/:id", async (req, res, next) => {
+  //update just the likes of the app
+  try {
+    const { likes } = req.body;
+    const updatedBlogToSend = {
+      ...req.body,
+      likes: likes,
+    };
+    //update
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      updatedBlogToSend,
+      {
+        new: true,
+        runValidators: true,
+        context: "query",
+      }
+    );
+    res.json(updatedBlog);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+blogRouter.get("/:id", async (req, res, next) => {
+  try {
+    const idToSearch = req.params.id;
+    const singleBlog = await Blog.findById(idToSearch);
+    if (!singleBlog) {
+      res.status(400).end();
+    }
+    res.json(singleBlog);
   } catch (error) {
     next(error);
   }

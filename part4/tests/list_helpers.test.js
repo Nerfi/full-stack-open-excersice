@@ -350,6 +350,33 @@ describe("testing HTTP methods of API", () => {
    
   });
 
+  test("when updating with correct values it should update", async () => {
+    //llamamos a todas las notas
+    const response = await api.get("/api/blogs");
+    //seleccionamos una , la primera
+    const singleBlog = response.body[0];
+
+    const updatedBlogLikes = {
+      ...singleBlog,
+      likes: 10,
+    };
+
+
+    //update
+    await api
+      .put(`/api/blogs/${singleBlog.id}`)
+      .send(updatedBlogLikes)
+      .expect(200);
+
+    //another call to get in order to check if it was updated
+    const resultUpdatedblog = await api
+      .get(`/api/blogs/${singleBlog.id}`)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(resultUpdatedblog.body).toEqual(updatedBlogLikes);
+  });
+
 
 
 });
@@ -383,6 +410,26 @@ describe("testing bad request HTTP", () => {
   });
 
 } )
+
+
+describe("viewving a specific blog", () => {
+  test("success with a valid id", async () => {
+    //llamamos a todas las notas
+    const response = await api.get("/api/blogs");
+    //seleccionamos una , la primera
+    const singleBlog = response.body[0];
+
+    //hacemos get request para la nota que hemos seleccionado pasandole su id para comprobar que todo salen bien
+
+    const resultSingleNote = await api
+      .get(`/api/blogs/${singleBlog.id}`)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    //comprobamos que el blog devuelto sea el mismo que el que hemos seleccionado  en:  const singleBlog = response.body[0];
+    expect(resultSingleNote.body).toEqual(singleBlog);
+  });
+});
 
 afterAll(() => {
   mongoose.connection.close();
