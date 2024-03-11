@@ -350,10 +350,39 @@ describe("testing HTTP methods of API", () => {
    
   });
 
- 
 
 
 });
+
+
+describe("testing bad request HTTP", () => {
+
+  test("check if  URL are missing not able to add new blog", async () => {
+    const blogWithoutUrl = {
+      title: "juan testing",
+      author: "Juan paredes"
+    };
+    await api
+      .post("/api/blogs")
+      .send(blogWithoutUrl)
+      .expect(400)
+     
+  });
+
+  test("check if title is missing not able to add new blog", async () => {
+    const failingBlog = {
+      author: "Juan paredes",
+      url: "https://reactpatterns.com/",
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(failingBlog)
+      .expect(400)
+      
+  });
+
+} )
 
 afterAll(() => {
   mongoose.connection.close();
