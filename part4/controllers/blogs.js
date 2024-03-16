@@ -1,5 +1,6 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/blogModel");
+const User = require("../models/userModel");
 //testing
 const blogList = require("../utils/list_helper");
 //app.use("/api/blogs", blogRoutes); esta linea ki que hace es poner /api/blogs como prefijo de cualquiera
@@ -7,7 +8,7 @@ const blogList = require("../utils/list_helper");
 
 blogRouter.get("/", async (req, res, next) => {
   try {
-    const allBlogs = await Blog.find({});
+    const allBlogs = await Blog.find({}).populate("user", {username: 1});
     if (allBlogs) {
       res.json(allBlogs);
     } else {
@@ -21,13 +22,25 @@ blogRouter.get("/", async (req, res, next) => {
 blogRouter.post("/", async (req, res, next) => {
   //if not likes default to 0
   const { title, author, url, likes = 0 } = req.body;
+  //finding random user for exercise 4.17
+  const randomUser = await User.find({});
   try {
     if (!req.body.title || !req.body.url) {
       res.status(400).end();
     }
-    const blog = new Blog({ title, author, url, likes });
+    const blog = new Blog({
+      title,
+      author,
+      url,
+      likes,
+      user: randomUser[0].id,
+    });
 
     const savedBlog = await blog.save(blog);
+    //updating users blogs
+
+    randomUser[0].blogs = randomUser[0].blogs?.concat(savedBlog._id);
+    await randomUser[0].save();
 
     res.status(201).json(savedBlog);
   } catch (error) {
