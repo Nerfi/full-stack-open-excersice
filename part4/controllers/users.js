@@ -1,20 +1,19 @@
 const bcrypt = require("bcrypt");
 const usersRouter = require("express").Router();
 const User = require("../models/userModel");
+const jwt = require('jsonwebtoken');
+
 
 usersRouter.post("/", async (req, res, next) => {
   //signup end-point
   const { username, name, password } = req.body;
 
-  if(password.length < 3) {
+  if (password.length < 3) {
     res.status(400).send({
-      error: "password must be at least 3"
-    })
+      error: "password must be at least 3",
+    });
     return;
   }
-
-  
-
 
   try {
     const saltRounds = 10;
@@ -29,11 +28,37 @@ usersRouter.post("/", async (req, res, next) => {
     const savedUser = await user.save();
     res.status(201).json(savedUser);
   } catch (error) {
-      res.status(400).send({
-        error: error.message 
-      })
+    res.status(400).send({
+      error: error.message,
+    });
     next(error);
   }
+});
+
+
+usersRouter.post("/login", async (req, res, next) => {
+  //LOGIN METHHOD
+  const { username, password } = req.body;
+
+  const user = await User.findOne({ username });
+
+  const passwordCorrect =
+    user === null ? false : await bcrypt.compare(password, user.passwordHash);
+
+  if (!(user && passwordCorrect)) {
+    return res.status(401).json({
+      error: "invalid username or password",
+    });
+  }
+
+  const userForToken = {
+    username: user.username,
+    id: user._id,
+  };
+
+  const token = jwt.sign(userForToken, process.env.SECRET);
+
+  res.status(200).send({ token, username: user.username, name: user.name });
 });
 
 usersRouter.get("/", async(req, res) => {

@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
     
   },
   name: String,
+  passwordHash: String,
   blogs: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -33,7 +34,7 @@ userSchema.set("toJSON", {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
-    delete returnedObject.password;
+    delete returnedObject.passwordHash
   },
 });
 
