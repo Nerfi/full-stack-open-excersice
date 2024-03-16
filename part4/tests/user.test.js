@@ -6,8 +6,7 @@ const app = require("../app");
 const api = supertest(app);
 
 describe("when there is initially one user in db", () => {
-  
-    beforeEach(async () => {
+  beforeEach(async () => {
     await User.deleteMany({});
     const passwordHash = await bcrypt.hash("sekret", 10);
     const user = new User({ username: "root", passwordHash });
@@ -37,6 +36,21 @@ describe("when there is initially one user in db", () => {
     const usernames = usersAtEnd.map((u) => u.username);
     expect(usernames).toContain(newUser.username);
   });
+
+  test("can not create invalid user", async () => {
+    
+    const invalidUser = {
+      username: "j",
+      password: "12",
+    };
+
+    await api.post("/api/users")
+    .send(invalidUser)
+    .expect(400)
+    
+
+  });
+
 });
 
 afterAll(() => {

@@ -2,21 +2,38 @@ const bcrypt = require("bcrypt");
 const usersRouter = require("express").Router();
 const User = require("../models/userModel");
 
-usersRouter.post("/", async (req, res) => {
-    //signup end-point
+usersRouter.post("/", async (req, res, next) => {
+  //signup end-point
   const { username, name, password } = req.body;
 
-  const saltRounds = 10;
-  const passwordHash = await bcrypt.hash(password, saltRounds);
+  if(password.length < 3) {
+    res.status(400).send({
+      error: "password must be at least 3"
+    })
+    return;
+  }
 
-  const user = new User({
-    username,
-    passwordHash,
-    name,
-  });
+  
 
-  const savedUser = await user.save();
-  res.status(201).json(savedUser);
+
+  try {
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+
+    const user = new User({
+      username,
+      passwordHash,
+      name,
+    });
+
+    const savedUser = await user.save();
+    res.status(201).json(savedUser);
+  } catch (error) {
+      res.status(400).send({
+        error: error.message 
+      })
+    next(error);
+  }
 });
 
 usersRouter.get("/", async(req, res) => {
