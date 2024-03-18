@@ -33,8 +33,14 @@ blogRouter.get("/", async (req, res, next) => {
 blogRouter.post("/", async (req, res, next) => {
   //if not likes default to 0
   const { title, author, url, likes = 0 } = req.body;
-  //finding random user for exercise 4.17
-  const randomUser = await User.find({});
+  const decodeToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  if(!decodeToken.id) {
+    return res.status(401).json({error: "token invalid"});
+  }
+
+   const user = await User.findById(decodeToken.id)
+
+
   try {
     if (!req.body.title || !req.body.url) {
       res.status(400).end();
@@ -44,14 +50,14 @@ blogRouter.post("/", async (req, res, next) => {
       author,
       url,
       likes,
-      user: randomUser[0].id,
+      user: user._id,
     });
 
     const savedBlog = await blog.save(blog);
     //updating users blogs
 
-    randomUser[0].blogs = randomUser[0].blogs?.concat(savedBlog._id);
-    await randomUser[0].save();
+    user.blogs = user.blogs?.concat(savedBlog._id);
+    await user.save()
 
     res.status(201).json(savedBlog);
   } catch (error) {
