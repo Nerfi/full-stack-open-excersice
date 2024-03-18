@@ -308,6 +308,8 @@ const blogs = [
 beforeEach(async () => {
   //set up DB
 
+  
+
   await BLOG.deleteMany({});
   let blogObject = new BLOG(blogs[0]);
   await blogObject.save();
@@ -338,6 +340,7 @@ describe("testing HTTP methods of API", () => {
 
     await api
       .post("/api/blogs")
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9uaW8iLCJpZCI6IjY1ZjVhY2EzNDM2NzhjM2U4NDc4NTYxMCIsImlhdCI6MTcxMDc1MzM4NH0.9P9mR9WvTNdx6CuAvfnkQTopDfSY-jeK1p6fS7Y3NSY')
       .send(newBlogToTest)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -367,6 +370,7 @@ describe("testing HTTP methods of API", () => {
     //update
     await api
       .put(`/api/blogs/${singleBlog.id}`)
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9uaW8iLCJpZCI6IjY1ZjVhY2EzNDM2NzhjM2U4NDc4NTYxMCIsImlhdCI6MTcxMDc1MzM4NH0.9P9mR9WvTNdx6CuAvfnkQTopDfSY-jeK1p6fS7Y3NSY')
       .send(updatedBlogLikes)
       .expect(200);
 
@@ -393,6 +397,7 @@ describe("testing bad request HTTP", () => {
     };
     await api
       .post("/api/blogs")
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9uaW8iLCJpZCI6IjY1ZjVhY2EzNDM2NzhjM2U4NDc4NTYxMCIsImlhdCI6MTcxMDc1MzM4NH0.9P9mR9WvTNdx6CuAvfnkQTopDfSY-jeK1p6fS7Y3NSY')
       .send(blogWithoutUrl)
       .expect(400)
      
@@ -406,6 +411,7 @@ describe("testing bad request HTTP", () => {
 
     await api
       .post("/api/blogs")
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFudG9uaW8iLCJpZCI6IjY1ZjVhY2EzNDM2NzhjM2U4NDc4NTYxMCIsImlhdCI6MTcxMDc1MzM4NH0.9P9mR9WvTNdx6CuAvfnkQTopDfSY-jeK1p6fS7Y3NSY')
       .send(failingBlog)
       .expect(400)
       

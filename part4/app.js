@@ -8,7 +8,10 @@ const mongoose = require("mongoose");
 const blogRoutes = require("./controllers/blogs");
 const loginRouter = require("./controllers/login");
 const userRouter = require("./controllers/users");
+const tokenExtractorMiddleware = require("./utils/middleware");
 const app = express();
+
+
 
 mongoose.set("strictQuery", false);
 
@@ -26,9 +29,14 @@ app.use(cors());
 app.use(express.static("dist"));
 app.use(express.json());
 
-app.use("/api/blogs", blogRoutes);
-app.use("/api/login", loginRouter);
 app.use("/api/users", userRouter);
+app.use("/api/login", loginRouter);
+//app.use(tokenExtractorMiddleware);
+app.use("/api/blogs", blogRoutes);
+
+
+
+
 
 app.use(
   morgan(function (tokens, req, res) {

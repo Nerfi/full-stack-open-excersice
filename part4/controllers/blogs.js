@@ -6,16 +6,9 @@ const jwt = require('jsonwebtoken');
 const blogList = require("../utils/list_helper");
 //app.use("/api/blogs", blogRoutes); esta linea ki que hace es poner /api/blogs como prefijo de cualquiera
 // de nuestras rutas
+const tokenExtractorMiddleware = require("../utils/middleware");
 
-//helper function in order to extract the token 
-const getTokenFrom = (request) => {
-  const authorization = request.get("authorization");
-  if (authorization && authorization.startsWith("Bearer ")) {
-    return authorization.replace("Bearer ", "");
-  }
 
-  return null;
-};
 
 blogRouter.get("/", async (req, res, next) => {
   try {
@@ -30,10 +23,12 @@ blogRouter.get("/", async (req, res, next) => {
   }
 });
 
-blogRouter.post("/", async (req, res, next) => {
+blogRouter.post("/",tokenExtractorMiddleware, async (req, res, next) => {
   //if not likes default to 0
   const { title, author, url, likes = 0 } = req.body;
-  const decodeToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+ // const decodeToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+ const decodeToken = jwt.verify(req.token,process.env.SECRET );
+
   if(!decodeToken.id) {
     return res.status(401).json({error: "token invalid"});
   }
@@ -66,7 +61,7 @@ blogRouter.post("/", async (req, res, next) => {
 });
 
 
-blogRouter.put("/:id", async (req, res, next) => {
+blogRouter.put("/:id",tokenExtractorMiddleware, async (req, res, next) => {
   //update just the likes of the app
   try {
     const { likes } = req.body;
@@ -105,15 +100,28 @@ blogRouter.get("/:id", async (req, res, next) => {
 });
 
 
-blogRouter.delete("/:id", async (req, res) => {
+blogRouter.delete("/:id", tokenExtractorMiddleware, async (req, res) => {
   try {
-    const author = await Blog.findByIdAndDelete(req.params.id);
-    res.status(200).json(author);
-   } catch (err) {
+
+    const singleblog = await Blog.findById(req.params.id);
+
+    const decodeToken = jwt.verify(req.token, process.env.SECRET);
+
+    if (singleblog.user.toString() === decodeToken.id) {
+      const author = await Blog.findByIdAndDelete(req.params.id);
+      res.status(200).json(author);
+    } else {
+      res.status(401).send({
+        error: "Unauthorized to delete this",
+      });
+    }
+
+    //const author = await Blog.findByIdAndDelete(req.params.id);
+  } catch (err) {
     res.status(500).json({
-     message: err.message,
+      message: err.message,
     });
-   }
-})
+  }
+});
 
 module.exports = blogRouter;
