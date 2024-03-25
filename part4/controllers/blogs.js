@@ -23,22 +23,24 @@ blogRouter.get("/", async (req, res, next) => {
   }
 });
 
-blogRouter.post("/",tokenExtractorMiddleware, async (req, res, next) => {
+blogRouter.post("/", tokenExtractorMiddleware, async (req, res, next) => {
   //if not likes default to 0
   const { title, author, url, likes = 0 } = req.body;
- // const decodeToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
- const decodeToken = jwt.verify(req.token,process.env.SECRET );
 
-  if(!decodeToken.id) {
-    return res.status(401).json({error: "token invalid"});
+  // const decodeToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  const decodeToken = jwt.verify(req.token, process.env.SECRET);
+
+  if (!decodeToken.id) {
+    return res.status(401).send({error: "token invalid"});
+     
   }
 
-   const user = await User.findById(decodeToken.id)
-
+  const user = await User.findById(decodeToken.id);
 
   try {
     if (!req.body.title || !req.body.url) {
-      res.status(400).end();
+      return res.status(400).end();
+      
     }
     const blog = new Blog({
       title,
@@ -52,9 +54,10 @@ blogRouter.post("/",tokenExtractorMiddleware, async (req, res, next) => {
     //updating users blogs
 
     user.blogs = user.blogs?.concat(savedBlog._id);
-    await user.save()
+    await user.save();
 
-    res.status(201).json(savedBlog);
+  return   res.status(201).json(savedBlog);
+ // res.json(savedBlog)
   } catch (error) {
     next(error);
   }
