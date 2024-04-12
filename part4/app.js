@@ -29,10 +29,19 @@ app.use(cors());
 app.use(express.static("dist"));
 app.use(express.json());
 
+
+
 app.use("/api/users", userRouter);
+
 app.use("/api/login", loginRouter);
 //app.use(tokenExtractorMiddleware);
 app.use("/api/blogs", blogRoutes);
+
+
+if(process.env.NODE_ENV === 'test') {
+  const testingRouter = require("./controllers/testing");
+  app.use("/api/testing", testingRouter);
+}
 
 
 

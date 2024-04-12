@@ -23,6 +23,7 @@ blogRouter.get("/", async (req, res, next) => {
 
 blogRouter.post("/", tokenExtractorMiddleware, async (req, res, next) => {
   //if not likes default to 0
+  //console.log(req, "REQUEST")
   const { title, author, url, likes = 0 } = req.body;
 
   // const decodeToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
