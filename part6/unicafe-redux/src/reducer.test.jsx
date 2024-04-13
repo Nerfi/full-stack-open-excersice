@@ -1,5 +1,5 @@
 import deepFreeze from "deep-freeze";
-import counterReducer from "./reducer";
+import { counterReducer } from "./reducer";
 
 describe("unicafe reducer", () => {
   const initialState = {
@@ -22,11 +22,7 @@ describe("unicafe reducer", () => {
     const action = {
       type: "GOOD",
     };
-    const state = {
-      good: 1,
-      ok: 0,
-      bad: 0,
-    };
+    const state = initialState;
 
     deepFreeze(state);
     const newState = counterReducer(state, action);
@@ -42,11 +38,7 @@ describe("unicafe reducer", () => {
       type: "OK",
     };
 
-    const state = {
-      good: 0,
-      ok: 1,
-      bad: 0,
-    };
+    const state = initialState;
     deepFreeze(state);
     const newState = counterReducer(state, action);
     expect(newState).toEqual({
@@ -61,11 +53,7 @@ describe("unicafe reducer", () => {
       type: "BAD",
     };
 
-    const state = {
-      good: 0,
-      ok: 0,
-      bad: 1,
-    };
+    const state = initialState;
     deepFreeze(state);
     const newState = counterReducer(state, action);
     expect(newState).toEqual({
