@@ -1,14 +1,5 @@
-
-
-
 function App() {
- 
-
-  return (
-    <>
-    
-    </>
-  )
+  return <><h1>TEsting</h1></>;
 }
 
-export default App
+export default App;
