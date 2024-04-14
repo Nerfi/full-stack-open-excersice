@@ -1,8 +1,11 @@
-
+/*
+ un reducer es una función a la que se le da el estado actual y una acción como parámetros.
+  Devuelve un nuevo estado.
+  */
 const anecdotesReducer = (state = [], action) => {
   switch (action.type) {
     case "ADD":
-        console.log(state, "estado incial")
+      console.log(state, "estado incial");
       return [...state, action.payload];
 
     case "VOTE":
@@ -10,13 +13,13 @@ const anecdotesReducer = (state = [], action) => {
       const id = action.payload.id;
       //find wich anecdote u want to vote
       const noteToVote = state.find((a) => a.id === id);
-      console.log(noteToVote, "noteVOTE")
+      console.log(noteToVote, "noteVOTE");
       const votedAnecdote = {
         ...noteToVote,
         votes: noteToVote.votes + 1,
       };
 
-      return state.map(anec => anec.id !== id ? anec : votedAnecdote)
+      return state.map((anec) => (anec.id !== id ? anec : votedAnecdote));
 
     default:
       break;
@@ -25,7 +28,7 @@ const anecdotesReducer = (state = [], action) => {
 //aux function
 const generateId = () => Number((Math.random() * 1000000).toFixed(0));
 
-//reducers
+//ACTION CREATORS
 
 export const addAnecdote = (anecdote) => {
   return {
@@ -46,5 +49,3 @@ export const voteAnecdote = (id) => {
 };
 
 export default anecdotesReducer;
-
-

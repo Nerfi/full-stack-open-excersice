@@ -12,9 +12,10 @@ const Anecdote = ({anecdote, handleClick, votes}) => {
 };
 
 export default function AnecdoteList() {
-  const anecdotes = useSelector((state) => state);
+  //sorting in descendign
+  const anecdotes = useSelector((state) => state.sort((a,b) => b.votes - a.votes));
   const dispatch = useDispatch();
-  console.log(anecdotes, "anecdotes slice of state");
+  
   return (
     <div>
       <ul>
