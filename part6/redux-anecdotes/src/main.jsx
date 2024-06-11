@@ -16,7 +16,10 @@ const reducer = combineReducers({
 
 const store = createStore(reducer);
 //dele this after
-store.subscribe(() => console.log(store.getState()))
+store.subscribe(() => console.log(store.getState(), "estado inicial stroe"))
+ //store.dispatch(filterReducer("IMPORTANT"));
+// store.dispatch(anecdotesReducer('combineReducers forms one reducer from many simple reducers'))
+
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(

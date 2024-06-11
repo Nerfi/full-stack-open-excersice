@@ -17,3 +17,5 @@ export const filterAnecdotes = (filter) => {
 
 
 export default filterReducer;
+
+//https://fullstackopen.com/es/part6/muchos_reducers

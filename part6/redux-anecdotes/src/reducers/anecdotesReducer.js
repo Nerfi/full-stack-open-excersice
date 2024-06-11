@@ -4,9 +4,9 @@
   */
 
 const initialState = [
-  { anecdote: "some random", votes: 0, id: 1 },
-  { anecdote: "some random anecdte 2", votes: 0, id: 2 },
-  { anecdote: "Juan Paredes", votes: 0, id: 3 },
+  { anecdote: "some random", votes: 0, id: 1 ,important: false},
+  { anecdote: "some random anecdte 2", votes: 0, id: 2 ,important: false},
+  { anecdote: "Juan Paredes", votes: 0, id: 3,important: true },
 ];
 const anecdotesReducer = (state = initialState, action) => {
   switch (action.type) {
