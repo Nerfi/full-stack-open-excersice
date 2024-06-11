@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { voteAnecdote } from "../reducers/anecdotesReducer";
 
 const Anecdote = ({ anecdote, handleClick, votes }) => {
+
+
   return (
     <li>
       {anecdote}
@@ -18,9 +20,7 @@ export default function AnecdoteList() {
 
     console.log(state.filter , "estado en AnecdoteList.jsx");
     
-    // if (state.filter === "ALL") {
-    //   return state.anecdotes.sort((a, b) => b.votes - a.votes);
-    // } 
+   
    
     //filtering part 
      let filterAnecdotes;
@@ -45,15 +45,10 @@ export default function AnecdoteList() {
             break;
 
     }
-    return filterAnecdotes.sort((a, b) => b.votes - a.votes);
 
+    return [...filterAnecdotes].sort((a, b) => b.votes - a.votes);
 
-
-    // return state.anecdotes
-    //   .sort((a, b) => b.votes - a.votes)
-    //   .filter((txt) =>
-    //     txt.anecdote.toLowerCase().includes(state.filter.toLowerCase())
-    //   );
+  
   });
 
   const dispatch = useDispatch();

@@ -2,23 +2,25 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
-import { createStore,combineReducers } from 'redux';
-import anecdotesReducer from "./reducers/anecdotesReducer.js";
-import filterReducer from "./reducers/filterAnecdotesReducer.js";
+//import { createStore,combineReducers } from 'redux';
+
+// import anecdotesReducer from "./reducers/anecdotesReducer.js";
+// import filterReducer from "./reducers/filterAnecdotesReducer.js";
+
+// importing the new way of creating a store with toolkit
+import store from "./store/store.js";
 
 
 //combined reducer
 
-const reducer = combineReducers({
-  anecdotes: anecdotesReducer,
-  filter: filterReducer
-})
+//this down here belongs to the old redux
 
-const store = createStore(reducer);
-//dele this after
-store.subscribe(() => console.log(store.getState(), "estado inicial stroe"))
- //store.dispatch(filterReducer("IMPORTANT"));
-// store.dispatch(anecdotesReducer('combineReducers forms one reducer from many simple reducers'))
+// const reducer = combineReducers({
+//   anecdotes: anecdotesReducer,
+//   filter: filterReducer
+// })
+
+// const store = createStore(reducer);
 
 
 
