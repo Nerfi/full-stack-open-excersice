@@ -19,13 +19,14 @@ const noteSlice = createSlice({
   reducers: {
     createAnecdote(state,action) {
       //data comming
-      const content = action.payload;
+      const anecdote = action.payload;
 
       console.log(current(state) , "state inical create")
 
       //logic
        state.push({
-        content,
+        anecdote,
+        votes: 0,
         important: false,
         id: generateId()
       })
@@ -41,11 +42,37 @@ const noteSlice = createSlice({
       }
 
       return state.map(anec => anec.id != id ? anec :  changedAnecdote)
+    },
+
+    filterByText(state,action) {
+      
+      if(action.payload != "") {
+        const anecdotes = [...state].filter(txt => txt.anecdote.toLowerCase().includes(action.payload.toLowerCase()));
+        return anecdotes;
+      }
+
+      return initialState;
+     
+    },
+    voteAnecdote(state, action) {
+      const id = action.payload;
+       //find wich anecdote u want to vote
+       const noteToVote = state.find((a) => a.id === id);
+       //update the value 
+       const votedAnecdote = {
+        ...noteToVote,
+        votes: noteToVote.votes + 1 
+       }
+
+       //sustituye
+       return state.map(anec => anec.id !== id ? anec : votedAnecdote);
+
+
     }
   }
 });
 
-export const { createAnecdote, toggleImportanceOf } = noteSlice.actions;
+export const { createAnecdote, toggleImportanceOf, filterByText, voteAnecdote } = noteSlice.actions;
 export default noteSlice.reducer;
 
 
@@ -90,11 +117,11 @@ const generateId = () => Number((Math.random() * 1000000).toFixed(0));
 //   };
 // };
 
-export const voteAnecdote = (id) => {
-  return {
-    type: "VOTE",
-    payload: { id },
-  };
-};
+// export const voteAnecdote = (id) => {
+//   return {
+//     type: "VOTE",
+//     payload: { id },
+//   };
+// };
 
 //export default anecdotesReducer;

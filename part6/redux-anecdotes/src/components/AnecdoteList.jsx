@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { voteAnecdote } from "../reducers/anecdotesReducer";
 
 const Anecdote = ({ anecdote, handleClick, votes }) => {
-
-
   return (
     <li>
       {anecdote}
@@ -17,38 +15,31 @@ export default function AnecdoteList() {
   //sorting in descendign
 
   const anecdotes2 = useSelector((state) => {
+    console.log(state.filter, "estado en AnecdoteList.jsx");
 
-    console.log(state.filter , "estado en AnecdoteList.jsx");
-    
-   
-   
-    //filtering part 
-     let filterAnecdotes;
-    switch(state.filter) {
+    //filtering part
+    let filterAnecdotes;
+    switch (state.filter) {
       case "ALL":
         filterAnecdotes = state.anecdotes;
         break;
 
-        case "IMPORTANT":
-          return filterAnecdotes = state.anecdotes.filter(anec => anec.important);
-          break;
-          case "NONIMPORTANT":
-            return filterAnecdotes = state.anecdotes.filter(anec => !anec.important);
-            break;
-            default:
-              //filtrar por texto
-             return filterAnecdotes = state.anecdotes
-              .sort((a, b) => b.votes - a.votes)
-              .filter((txt) =>
-                txt.anecdote.toLowerCase().includes(state.filter.toLowerCase())
-              );
-            break;
-
+      case "IMPORTANT":
+         (filterAnecdotes = state.anecdotes.filter(
+          (anec) => anec.important
+        ));
+        break;
+      case "NONIMPORTANT":
+         (filterAnecdotes = state.anecdotes.filter(
+          (anec) => !anec.important
+        ));
+        break;
+      default:
+       return state;
+        break;
     }
 
     return [...filterAnecdotes].sort((a, b) => b.votes - a.votes);
-
-  
   });
 
   const dispatch = useDispatch();

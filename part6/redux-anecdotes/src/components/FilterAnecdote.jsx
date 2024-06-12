@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { filterAnecdotes } from "../reducers/filterAnecdotesReducer";
+import {filterByText} from "../reducers/anecdotesReducer";
 
 export default function FilterAnecdote() {
   const dispatch = useDispatch();
@@ -8,11 +9,10 @@ export default function FilterAnecdote() {
   const handleFilter = (e) => {
     e.preventDefault();
 
-    //console.log(e.target.value, "filter value??")
     const filterValue = e.target.value;
     //limpiando pseudo estado
     //e.target.filter.value = "";
-    dispatch(filterAnecdotes(filterValue));
+    dispatch(filterByText(filterValue));
   };
   //style
   const style = {
