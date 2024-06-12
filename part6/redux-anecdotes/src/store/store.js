@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import anecdotesReducer from '../reducers/anecdotesReducer';
+import anecdotesReducer, {setNotes} from '../reducers/anecdotesReducer';
 import filterReducer from '../reducers/filterAnecdotesReducer';
+//importamos el servicio
+import anecdotesService from '../../services/anecdotes';
 
 
 
@@ -9,6 +11,10 @@ reducer: {
     anecdotes: anecdotesReducer,
     filter: filterReducer 
 }
-}) 
+});
+
+//anecdotesService.getAll().then(anecdotes => store.dispatch(setNotes(anecdotes)));
+
+
 
 export default store;

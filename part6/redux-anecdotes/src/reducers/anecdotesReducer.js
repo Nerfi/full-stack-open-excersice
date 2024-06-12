@@ -6,30 +6,25 @@
 //new way of doing redux
 import { createSlice, current } from "@reduxjs/toolkit";
 
-const initialState = [
-  { anecdote: "some random", votes: 0, id: 1, important: false },
-  { anecdote: "some random anecdte 2", votes: 0, id: 2, important: false },
-  { anecdote: "Juan Paredes", votes: 0, id: 3, important: true },
-];
+// const initialState = [
+//   { anecdote: "some random", votes: 0, id: 1, important: false },
+//   { anecdote: "some random anecdte 2", votes: 0, id: 2, important: false },
+//   { anecdote: "Juan Paredes", votes: 0, id: 3, important: true },
+// ];
 
 //new way of doing redux
 const noteSlice = createSlice({
   name: "anecdotes",
-  initialState, 
+  initialState: [], 
   reducers: {
     createAnecdote(state,action) {
       //data comming
       const anecdote = action.payload;
 
-      console.log(current(state) , "state inical create")
+      //console.log(current(anecdote) , "state inical create")
 
       //logic
-       state.push({
-        anecdote,
-        votes: 0,
-        important: false,
-        id: generateId()
-      })
+       state.push(anecdote);
     },
     toggleImportance(state,action){
        //data comming
@@ -68,11 +63,19 @@ const noteSlice = createSlice({
        return state.map(anec => anec.id !== id ? anec : votedAnecdote);
 
 
+    },
+
+    appendNote(state, action){
+      state.push(action.payload);
+
+    },
+    setNotes(state, action) {
+      return action.payload
     }
   }
 });
 
-export const { createAnecdote, toggleImportanceOf, filterByText, voteAnecdote } = noteSlice.actions;
+export const { createAnecdote, toggleImportanceOf, filterByText, voteAnecdote, appendNote, setNotes } = noteSlice.actions;
 export default noteSlice.reducer;
 
 
