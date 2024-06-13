@@ -1,10 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 //import { addAnecdote } from "../reducers/anecdotesReducer";
-//new way of doing it
-import {createAnecdote} from "../reducers/anecdotesReducer";
+
 //back-end stuff
 import anecdotesService from "../../services/anecdotes";
+
+//redux thunk
+import { createAnecdote } from "../reducers/anecdotesReducer";
 
 
 /* por la simplicidad que tiene este formulario lo que hems 
@@ -19,10 +21,11 @@ export default function AnecdoteForm() {
     const content = e.target.content.value;
     //limpiando
     e.target.content.value = "";
+    //delete it because we use redux thunk
+    //const newAnecdote = await anecdotesService.createAnecdote(content);
 
-    const newAnecdote = await anecdotesService.createAnecdote(content);
     //add to store
-    dispatch(createAnecdote(newAnecdote));
+    dispatch(createAnecdote(content));
   };
   return (
     <div>

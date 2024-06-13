@@ -5,6 +5,7 @@
 
 //new way of doing redux
 import { createSlice, current } from "@reduxjs/toolkit";
+import anecdotesService from "../../services/anecdotes";
 
 // const initialState = [
 //   { anecdote: "some random", votes: 0, id: 1, important: false },
@@ -17,15 +18,15 @@ const noteSlice = createSlice({
   name: "anecdotes",
   initialState: [], 
   reducers: {
-    createAnecdote(state,action) {
-      //data comming
-      const anecdote = action.payload;
+    // createAnecdote(state,action) {
+    //   //data comming
+    //   const anecdote = action.payload;
 
-      //console.log(current(anecdote) , "state inical create")
+    //   //console.log(current(anecdote) , "state inical create")
 
-      //logic
-       state.push(anecdote);
-    },
+    //   //logic
+    //    state.push(anecdote);
+    // },
     toggleImportance(state,action){
        //data comming
       const idToToggle = action.payload;
@@ -75,7 +76,22 @@ const noteSlice = createSlice({
   }
 });
 
-export const { createAnecdote, toggleImportanceOf, filterByText, voteAnecdote, appendNote, setNotes } = noteSlice.actions;
+export const {  toggleImportanceOf, filterByText, voteAnecdote, appendNote, setNotes } = noteSlice.actions;
+//redux thunk 
+export const initAnecdotes =() => {
+  return async dispatch => {
+    const anecdotes = await anecdotesService.getAll();
+    dispatch(setNotes(anecdotes))
+  }
+}
+
+export const createAnecdote = (content) => {
+  return async dispatch => {
+    const createAnec = await anecdotesService.createAnecdote(content);
+    dispatch(appendNote(createAnec));
+
+  }
+}
 export default noteSlice.reducer;
 
 
@@ -105,7 +121,7 @@ export default noteSlice.reducer;
 //   }
 // };
 //aux function
-const generateId = () => Number((Math.random() * 1000000).toFixed(0));
+//const generateId = () => Number((Math.random() * 1000000).toFixed(0));
 
 //ACTION CREATORS
 
