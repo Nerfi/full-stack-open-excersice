@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { voteAnecdote } from "../reducers/anecdotesReducer";
+import { voteAnecdote2 } from "../reducers/anecdotesReducer";
 
 const Anecdote = ({ anecdote, handleClick, votes }) => {
 
@@ -56,7 +56,7 @@ export default function AnecdoteList() {
             key={id}
             anecdote={content}
             votes={votes}
-            handleClick={() => dispatch(voteAnecdote(id))}
+            handleClick={() => dispatch(voteAnecdote2(id))}
           />
         ))}
         

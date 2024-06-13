@@ -51,20 +51,36 @@ const noteSlice = createSlice({
      
     },
     voteAnecdote(state, action) {
-      const id = action.payload;
-       //find wich anecdote u want to vote
-       const noteToVote = state.find((a) => a.id === id);
-       //update the value 
-       const votedAnecdote = {
-        ...noteToVote,
-        votes: noteToVote.votes + 1 
-       }
+      // const id = action.payload;
+      //  //find wich anecdote u want to vote
+      //  const noteToVote = state.find((a) => a.id === id);
+      //  //update the value 
+      //  const votedAnecdote = {
+      //   ...noteToVote,
+      //   votes: noteToVote.votes + 1 
+      //  }
 
-       //sustituye
-       return state.map(anec => anec.id !== id ? anec : votedAnecdote);
+      //  //sustituye
+      //  return state.map(anec => anec.id !== id ? anec : votedAnecdote);
+
+      //thunk way 
+      const id = action.payload.id;
+
+
+      const updatedState = state.map(anecdote =>
+        anecdote.id !== id ? anecdote : action.payload
+      );
+      return updatedState;
 
 
     },
+
+    // voteAnecdote(state,action) {
+    //   const id = action.payload;
+    //   const noteToVote = state.find((a) => a.id === id);
+
+
+    // },
 
     appendNote(state, action){
       state.push(action.payload);
@@ -72,11 +88,12 @@ const noteSlice = createSlice({
     },
     setNotes(state, action) {
       return action.payload
+
     }
   }
 });
 
-export const {  toggleImportanceOf, filterByText, voteAnecdote, appendNote, setNotes } = noteSlice.actions;
+export const {  toggleImportanceOf, filterByText,  appendNote, setNotes, voteAnecdote } = noteSlice.actions;
 //redux thunk 
 export const initAnecdotes =() => {
   return async dispatch => {
@@ -92,6 +109,17 @@ export const createAnecdote = (content) => {
 
   }
 }
+
+export const voteAnecdote2 = (id) => {
+  return async (dispatch, getState) => {
+    const estado = getState().anecdotes;
+    const votedAnecdote = await anecdotesService.vote(id,estado);
+    dispatch(voteAnecdote(votedAnecdote));
+    
+  }
+}
+
+// end thunk
 export default noteSlice.reducer;
 
 
