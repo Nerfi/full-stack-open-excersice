@@ -3,6 +3,9 @@
   Devuelve un nuevo estado.
   */
 
+
+  //LO DEJAMOS AQUI https://fullstackopen.com/es/part6/react_query_use_reducer_y_el_contexto
+
 //new way of doing redux
 import { createSlice, current } from "@reduxjs/toolkit";
 import anecdotesService from "../../services/anecdotes";
