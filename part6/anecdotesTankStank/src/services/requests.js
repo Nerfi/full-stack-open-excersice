@@ -12,3 +12,7 @@ export const getAnecdotes = () =>
   export const updateAnecdote = anecdote => {
     axios.put(`${baseURL}/${anecdote.id}`, anecdote).then(res => res.data);
   }
+
+  export const voteAnecdote = (anecdote) => {
+    axios.put(`${baseURL}/${anecdote.id}`, anecdote).then(res =>  res.data);
+  }
