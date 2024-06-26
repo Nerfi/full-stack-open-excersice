@@ -8,8 +8,16 @@ import {
   updateAnecdote,
   voteAnecdote,
 } from "./services/requests";
+//reducer + context
+import { useContext } from "react";
+import NotificationContext from "./context/NotifContext";
 
 const App = () => {
+  //reducer + context
+  const [notif, dispatch] = useContext(NotificationContext);
+
+  console.log(notif, "notifi vote");
+
   //con esta logica/codigo lo que vamos a hacer es anular la antigua query , cuando mutemos
   //para asi poder actualizar el front con lo nuevo agregado en el back
   const queryClient = useQueryClient();
@@ -67,9 +75,10 @@ const App = () => {
     },
   });
 
-  const handleVote =  (anecdote) => {
-
+  const handleVote = (anecdote) => {
     voteAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 });
+    //dispatching reducer + context
+    dispatch({ type: "vote", payload: anecdote.content });
   };
 
   if (result.isLoading) {
@@ -82,13 +91,11 @@ const App = () => {
 
   //console.log(result, "resultado");
 
-  
-
   return (
     <div>
       <h3>Anecdote app tank stank </h3>
+      {notif.estado ? <Notification /> : null}
 
-      <Notification />
       <AnecdoteForm anecdoteAdd={addAnecdote} />
 
       {anecdotes.map((anecdote) => (
