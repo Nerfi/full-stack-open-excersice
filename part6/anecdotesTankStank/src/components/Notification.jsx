@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default function Notification() {
+export default function Notification({notification}) {
   return (
-    <div>Notification</div>
+    <div>Notification "{notification}" has been voted</div>
   )
 }

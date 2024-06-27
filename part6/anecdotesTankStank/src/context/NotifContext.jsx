@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useEffect } from "react";
 
 //creando el reducer para las notificaciones
 
@@ -6,13 +6,23 @@ const notifReducer = (state, action) => {
   //maybe change the state
   switch (action.type) {
     case "add":
-     return !state
-    
+      return {
+        ...state,
+        estado: !state.estado
+      }
+
     case "vote":
-        return {
-            estado: !state,
-            notif: action.payload
-        }
+      return {
+        //...state,
+        estado: !state?.estado,
+        notif: action.payload,
+      };
+
+    case "restore":
+      return {
+        ...state,
+        estado: false,
+      };
 
     default:
       return state;
@@ -22,7 +32,21 @@ const notifReducer = (state, action) => {
 const NotificationContext = createContext();
 
 export const NotificationContextProvider = (props) => {
-  const [notif, dispatch] = useReducer(notifReducer, false);
+  const initialState = {
+    estado: false, // Estado inicial.
+    notif: null, // Notificación inicial.
+  };
+  const [notif, dispatch] = useReducer(notifReducer, initialState);
+
+  //not really sure how this will play but we leave it for now
+  useEffect(() => {
+    if (notif.estado) {
+      const timerForNotification = setTimeout(() => {
+        dispatch({ type: "restore" });
+      }, 3000);
+      return () => clearTimeout(timerForNotification);
+    }
+  }, [notif?.estado]);
 
   return (
     <NotificationContext.Provider value={[notif, dispatch]}>

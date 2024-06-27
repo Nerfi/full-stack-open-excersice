@@ -16,7 +16,7 @@ const App = () => {
   //reducer + context
   const [notif, dispatch] = useContext(NotificationContext);
 
-  console.log(notif, "notifi vote");
+  //console.log(notif, "notifi vote");
 
   //con esta logica/codigo lo que vamos a hacer es anular la antigua query , cuando mutemos
   //para asi poder actualizar el front con lo nuevo agregado en el back
@@ -33,8 +33,16 @@ const App = () => {
       //añadimos la nueva entrada a nuestra bbdd
       const notes = queryClient.getQueryData(["notes"]);
       queryClient.setQueryData(["notes"], notes.concat(newAnecdote));
+
+      
     },
+    onError: (error)=> {
+      console.log("ERROR  "+ error)
+      //throw error;
+    //if(axios.isA)
+    }
   });
+
 
   //otra mutacion para hacer update
   const updateAnecdoteMutation = useMutation({
@@ -81,9 +89,12 @@ const App = () => {
     dispatch({ type: "vote", payload: anecdote.content });
   };
 
+
   if (result.isLoading) {
     return <div>loading data...</div>;
   }
+
+  console.log(result, "RESULT")
 
   if (result.isError) {
     return <div>anecdote service not available due to problems in server</div>;
@@ -94,7 +105,7 @@ const App = () => {
   return (
     <div>
       <h3>Anecdote app tank stank </h3>
-      {notif.estado ? <Notification /> : null}
+      {notif && notif.estado ? <Notification notification={notif.notif} /> : null}
 
       <AnecdoteForm anecdoteAdd={addAnecdote} />
 
