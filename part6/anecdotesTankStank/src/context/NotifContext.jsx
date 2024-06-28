@@ -23,6 +23,13 @@ const notifReducer = (state, action) => {
         ...state,
         estado: false,
       };
+      
+      case "error":
+        return {
+          ...state,
+          estado: true,
+          notif: action.payload
+        }
 
     default:
       return state;

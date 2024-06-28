@@ -4,6 +4,8 @@ import NotificationContext from "../context/NotifContext";
 const AnecdoteForm = ({anecdoteAdd}) => {
   const [notif, dispatch] = useContext(NotificationContext);
 
+  console.log(notif, "NOTIF IN FORM")
+
  // console.log(notif, "notif state from reducer and context"); works as expected
 
     const onCreate = (event) => {

@@ -9,7 +9,7 @@ export const getAnecdotes = () =>
     try {
       return await axios.post(baseURL, anecdote).then(res => res.data);  
     } catch (error) {
-      console.log(error.response.data.error, "error in request archivo")
+      //console.log(error.response.data.error, "error in request archivo")
       throw error.response.data.error;
     }
     
