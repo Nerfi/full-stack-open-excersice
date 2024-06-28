@@ -7,17 +7,16 @@ const Menu = () => {
   return (
     <div>
       <Router>
-        {/* <Link to="/" style={padding}>anecdotes</Link> */}
         <Link style={padding} to="/">
           anecdotes
         </Link>
 
-        <a href="#" style={padding}>
+        <Link style={padding} to="/create">
           create new
-        </a>
-        <a href="#" style={padding}>
+        </Link>
+        <Link to="/about" style={padding}>
           about
-        </a>
+        </Link>
       </Router>
     </div>
   );
