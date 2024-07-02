@@ -10,6 +10,8 @@ const Menu = () => {
     paddingRight: 5,
   };
   //anecdotes
+  //this is not the best place to have this but for now will work 
+
   const [anecdotes, setAnecdotes] = useState([
     {
       content: "If it hurts, do it more often",
@@ -41,7 +43,7 @@ const Menu = () => {
         </Link>
         {/* RUUTAS */}
         <Routes>
-          <Route path="/create" element={<CreateNew />} />
+          <Route path="/create" element={<CreateNew anecdoteSetter={setAnecdotes}/>} />
           <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
           <Route path="/about" element={<About />} />
           <Route path="/anecdote/:id" element={<Anecdote anecdotes={anecdotes} />} />
