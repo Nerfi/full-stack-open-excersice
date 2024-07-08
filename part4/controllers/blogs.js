@@ -61,15 +61,15 @@ blogRouter.post("/", tokenExtractorMiddleware, async (req, res, next) => {
 
 blogRouter.put("/:id", tokenExtractorMiddleware, async (req, res, next) => {
   //update just the likes of the app
-  //finding the user 
+  //finding the user
   const decodeToken = jwt.verify(req.token, process.env.SECRET);
   if (!decodeToken.id) {
     return res.status(401).send({ error: "token invalid" });
   }
   const user = await User.findById(decodeToken.id);
   try {
-
     const { likes } = req.body;
+    //console.log(req.body, "likes send");
     const updatedBlogToSend = {
       //añadir ref al user once front-end is done
       ...req.body,
@@ -106,7 +106,6 @@ blogRouter.get("/:id", async (req, res, next) => {
 });
 
 blogRouter.delete("/:id", tokenExtractorMiddleware, async (req, res) => {
-  
   const decodeToken = jwt.verify(req.token, process.env.SECRET);
   if (!decodeToken) {
     return res.status(401).send({ error: "Unauthorized to delete this" });
