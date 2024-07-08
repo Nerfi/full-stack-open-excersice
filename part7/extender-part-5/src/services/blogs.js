@@ -17,11 +17,9 @@ const login = async (credentials) => {
     const response = await axios.post(loginBaseURL, credentials);
     return response.data;
   } catch (error) {
-   
-    console.log(error)
+    console.log(error);
   }
 };
-
 
 const setToken = (newToken) => {
   token = `Bearer ${newToken}`;
@@ -40,18 +38,21 @@ const createBlogPost = async (blogPost) => {
   }
 };
 
-const addLikeToPost =  async (blogId, blogDataUpdate) => {
+const addLikeToPost = async (blogId, blogDataUpdate) => {
   const config = {
     headers: { Authorization: token },
   };
   try {
-    const updatedRes = await axios.put(`${baseUrl}/${blogId}`,blogDataUpdate, config);
+    const updatedRes = await axios.put(
+      `${baseUrl}/${blogId}`,
+      blogDataUpdate,
+      config
+    );
     return updatedRes.data;
   } catch (error) {
     console.log(error);
   }
-
-}
+};
 
 const deleteBlogPost = async (blogId) => {
   const config = {
@@ -64,4 +65,11 @@ const deleteBlogPost = async (blogId) => {
     console.log(error);
   }
 };
-export { getAll, login, setToken, createBlogPost , addLikeToPost, deleteBlogPost};
+export {
+  getAll,
+  login,
+  setToken,
+  createBlogPost,
+  addLikeToPost,
+  deleteBlogPost,
+};

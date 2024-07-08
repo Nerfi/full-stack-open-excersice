@@ -3,7 +3,6 @@ import Blog from "./components/Blog";
 import {
   login,
   setToken,
-  createBlogPost,
   addLikeToPost,
   deleteBlogPost,
 } from "./services/blogs";
@@ -16,7 +15,11 @@ import { useSelector, useDispatch } from "react-redux";
 //importing the action creator from the file were it was added
 import { toggleNotification } from "./redux/reducers/notificationSlice";
 //redux thunk
-import { fetchBlogs, createBlog } from "./redux/reducers/blogSlice";
+import {
+  fetchBlogs,
+  createBlog,
+  addLikeToBlog,
+} from "./redux/reducers/blogSlice";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -68,10 +71,14 @@ const App = () => {
 
   const handleUpdateblog = async (id, data) => {
     try {
-      const updatedBlog = await addLikeToPost(id, data);
-      setBlogs((prev) => {
-        return prev.map((b) => (b.id != id ? b : updatedBlog));
-      });
+      // const updatedBlog = await addLikeToPost(id, data);
+      // setBlogs((prev) => {
+      //   return prev.map((b) => (b.id != id ? b : updatedBlog));
+      // });
+
+      //REDUX THUNK
+      //console.log(data, "DATA in handleUpdateblog"); //la data pasada aqui es la correcta
+      dispatch(addLikeToBlog(data));
     } catch (error) {
       console.log(error);
     }

@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import Togglable from "./Toggale";
 import axios from "axios";
+//redux thunk
+import { useDispatch } from "react-redux";
+import { addLikeToBlog } from "../redux/reducers/blogSlice";
 
 const Blog = ({ blog, handleUpdateblog, handleDelete, user }) => {
   const [likes, setLikes] = useState(0);
+  const dispatch = useDispatch();
 
   const blogStyle = {
     paddingTop: 10,
@@ -25,7 +29,7 @@ const Blog = ({ blog, handleUpdateblog, handleDelete, user }) => {
     fetchLikes();
   }, []);
 
-  const handleAddLike = (e) => {
+  const handleAddLike = async (e) => {
     e.preventDefault();
     e.persist();
 
@@ -36,7 +40,10 @@ const Blog = ({ blog, handleUpdateblog, handleDelete, user }) => {
       user: blog.user.id,
       likes: updatedLikes,
     };
-    handleUpdateblog(blog.id, dataToUpdate);
+
+    console.log(dataToUpdate, "DATA TO UPDATE");
+    //handleUpdateblog(dataToUpdate);
+    dispatch(addLikeToBlog(dataToUpdate));
   };
 
   const handleRemoveBlogPost = (e) => {
@@ -56,15 +63,16 @@ const Blog = ({ blog, handleUpdateblog, handleDelete, user }) => {
               <li className="url"> {blog.url}</li>
               <li className="likes">
                 likes: {blog.likes}
-                <button onClick={handleAddLike} id="like" >Like</button>
+                <button onClick={handleAddLike} id="like">
+                  Like
+                </button>
               </li>
             </ul>
             <div>
-            {user?.name.toLowerCase() === blog.author.toLowerCase() ? (
-              <button onClick={handleRemoveBlogPost}>Remove</button>
-            ) : null}
+              {user?.name.toLowerCase() === blog.author.toLowerCase() ? (
+                <button onClick={handleRemoveBlogPost}>Remove</button>
+              ) : null}
             </div>
-           
           </div>
         </div>
       </Togglable>
