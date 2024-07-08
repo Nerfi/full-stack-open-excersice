@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import {
-  getAll,
   login,
   setToken,
   createBlogPost,
@@ -16,6 +15,8 @@ import Notification from "./components/Notification";
 import { useSelector, useDispatch } from "react-redux";
 //importing the action creator from the file were it was added
 import { toggleNotification } from "./redux/reducers/notificationSlice";
+//redux thunk
+import { fetchBlogs, createBlog } from "./redux/reducers/blogSlice";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -25,9 +26,9 @@ const App = () => {
 
   //redux hooks
   const showNotification = useSelector((state) => state.notification.show);
-  const dispatch = useDispatch();
+  const blogsThunk = useSelector((state) => state.blogs.blogs);
 
-  console.log(showNotification, "show notifi redux ");
+  const dispatch = useDispatch();
 
   const handleLogin = async (username, password) => {
     try {
@@ -46,10 +47,13 @@ const App = () => {
   //create post handler
   const handleCreateBlog = async (data) => {
     try {
-      const blogCreated = await createBlogPost(data);
-      //setting up the state
-      setBlogs((prev) => [...prev, blogCreated]);
+      // const blogCreated = await createBlogPost(data);
+      // //setting up the state
+      // setBlogs((prev) => [...prev, blogCreated]);
       //closing the model once we add one note/blog
+
+      //REDUX THUNK
+      dispatch(createBlog(data));
       notesFormRef.current.toggleVisibility();
 
       dispatch(toggleNotification());
@@ -87,9 +91,13 @@ const App = () => {
   };
 
   useEffect(() => {
-    getAll().then((blogs) => {
-      setBlogs(blogs.sort((a, b) => b.likes - a.likes));
-    });
+    //old way of doing it before redux thunk implementation
+    // getAll().then((blogs) => {
+    //   setBlogs(blogs.sort((a, b) => b.likes - a.likes));
+    // });
+
+    //REDUX THUNK
+    dispatch(fetchBlogs());
   }, []);
 
   /*
@@ -170,7 +178,7 @@ const App = () => {
         </Togglable>
       )}
       {user != null &&
-        blogs.map((blog) => (
+        blogsThunk.map((blog) => (
           <div key={blog.id} className="blogs">
             <Blog
               blog={blog}
