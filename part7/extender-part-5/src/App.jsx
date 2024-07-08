@@ -87,7 +87,6 @@ const App = () => {
 
   //   const loggedUserJson = window.localStorage.getItem("loggedNoteappUser");
 
-
   //   //if (loggedUserJson === undefined) return;
 
   //   if (!loggedUserJson) {
@@ -103,17 +102,16 @@ const App = () => {
   //   }
   // }, []);
 
-
   useEffect(() => {
     // Intentamos obtener el usuario del localStorage
     const loggedUserJson = window.localStorage.getItem("loggedNoteappUser");
-  
+
     // Si no hay nada en el localStorage, aseguramos que user sea null
     if (!loggedUserJson) {
       setUser(null);
       return;
     }
-  
+
     try {
       // Intentamos parsear el JSON
       const user = JSON.parse(loggedUserJson);
@@ -155,7 +153,7 @@ const App = () => {
       )}
       {user != null &&
         blogs.map((blog) => (
-          <div  key={blog.id} className="blogs"> 
+          <div key={blog.id} className="blogs">
             <Blog
               blog={blog}
               handleUpdateblog={handleUpdateblog}

@@ -5,6 +5,8 @@ const loginBaseURL = "/api/users/login";
 let token = null;
 let error = null;
 
+//TODO LATER: ADD A CREATE USER ENDPOINT
+
 const getAll = () => {
   const request = axios.get(baseUrl);
   return request.then((response) => response.data);
