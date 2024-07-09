@@ -19,6 +19,7 @@ import {
   fetchBlogs,
   createBlog,
   addLikeToBlog,
+  deleteSingleBlog,
 } from "./redux/reducers/blogSlice";
 
 const App = () => {
@@ -77,7 +78,6 @@ const App = () => {
       // });
 
       //REDUX THUNK
-      //console.log(data, "DATA in handleUpdateblog"); //la data pasada aqui es la correcta
       dispatch(addLikeToBlog(data));
     } catch (error) {
       console.log(error);
@@ -88,10 +88,12 @@ const App = () => {
 
   const handleDeleteBlog = async (id) => {
     try {
-      const deleteBlog = await deleteBlogPost(id);
-      setBlogs((prev) => {
-        return prev.filter((b) => b.id != deleteBlog.id);
-      });
+      // const deleteBlog = await deleteBlogPost(id);
+      // setBlogs((prev) => {
+      //   return prev.filter((b) => b.id != deleteBlog.id);
+      // });
+
+      dispatch(deleteSingleBlog(id));
     } catch (error) {
       console.log(error);
     }

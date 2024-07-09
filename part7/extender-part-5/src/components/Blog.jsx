@@ -41,7 +41,6 @@ const Blog = ({ blog, handleUpdateblog, handleDelete, user }) => {
       likes: updatedLikes,
     };
 
-    console.log(dataToUpdate, "DATA TO UPDATE");
     //handleUpdateblog(dataToUpdate);
     dispatch(addLikeToBlog(dataToUpdate));
   };

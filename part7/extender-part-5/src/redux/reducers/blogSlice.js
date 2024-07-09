@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAll, createBlogPost, addLikeToPost } from "../../services/blogs";
+import {
+  getAll,
+  createBlogPost,
+  addLikeToPost,
+  deleteBlogPost,
+} from "../../services/blogs";
 
 const initialState = {
   blogs: [],
@@ -23,6 +28,12 @@ const blogsSlice = createSlice({
       state.blogs = state.blogs.map((blog) =>
         blog.id !== action.payload.id ? blog : action.payload
       );
+    });
+
+    builder.addCase(deleteSingleBlog.fulfilled, (state, action) => {
+      state.blogs = state.blogs.filter((blog) => {
+        return blog.id !== action.payload.id;
+      });
     });
   },
 });
@@ -69,5 +80,16 @@ export const addLikeToBlog = createAsyncThunk(
     }
   }
 );
-//7.12: Redux, Paso 3
-//Amplía tu solución para que sea posible volver a dar me gusta y eliminar un blog.
+
+export const deleteSingleBlog = createAsyncThunk(
+  "blogs/deleteBlog",
+  async (blogId) => {
+    try {
+      const deleteBlog = await deleteBlogPost(blogId);
+      return deleteBlog;
+    } catch (error) {
+      console.log("error deleting brlog");
+      throw error;
+    }
+  }
+);
