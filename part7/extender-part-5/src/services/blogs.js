@@ -1,6 +1,7 @@
 import axios from "axios";
 const baseUrl = "/api/blogs";
 const loginBaseURL = "/api/users/login";
+const signupUserURL = "/api/users";
 
 let token = null;
 let error = null;

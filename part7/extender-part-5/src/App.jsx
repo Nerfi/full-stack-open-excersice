@@ -1,15 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
-import {
-  login,
-  setToken,
-  addLikeToPost,
-  deleteBlogPost,
-} from "./services/blogs";
+import { login, setToken } from "./services/blogs";
 import Login from "./components/Login";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Toggale";
 import Notification from "./components/Notification";
+import SignUp from "./components/SignUp";
 //redux extending the app
 import { useSelector, useDispatch } from "react-redux";
 //importing the action creator from the file were it was added
@@ -117,56 +113,58 @@ const App = () => {
   de un usuario que inició sesión ya se pueden encontrar en el local storage. 
   Si se encuentran allí, los detalles se guardan en el estado de la aplicación
   */
-  useEffect(() => {
-    //esto soluciona el problema de no tener un usuario
-    //  setUser(null);
-    //if (!user) return;?¿
+  // useEffect(() => {
+  //   //esto soluciona el problema de no tener un usuario
+  //   //  setUser(null);
+  //   //if (!user) return;?¿
 
+  //   const loggedUserJson = window.localStorage.getItem("loggedNoteappUser");
+
+  //   //if (loggedUserJson === undefined) return;
+
+  //   if (!loggedUserJson) {
+  //     //setUser(null);
+  //     dispatch(saveUserInfo(null));
+  //     return;
+  //   }
+
+  //   if (loggedUserJson && loggedUserJson) {
+  //     const user = JSON.parse(loggedUserJson);
+  //     //setUser(user);
+  //     //redux part 7
+  //     dispatch(saveUserInfo(user));
+
+  //     setToken(user?.token);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    // Intentamos obtener el usuario del localStorage
     const loggedUserJson = window.localStorage.getItem("loggedNoteappUser");
 
-    //if (loggedUserJson === undefined) return;
-
+    // Si no hay nada en el localStorage, aseguramos que user sea null
     if (!loggedUserJson) {
       //setUser(null);
       dispatch(saveUserInfo(null));
       return;
     }
 
-    if (loggedUserJson && loggedUserJson) {
+    try {
+      // Intentamos parsear el JSON
       const user = JSON.parse(loggedUserJson);
       //setUser(user);
-      //redux part 7
       dispatch(saveUserInfo(user));
-
       setToken(user?.token);
+    } catch (error) {
+      // Si hay un error parseando, mostramos un mensaje en la consola y ponemos user como null
+      console.error("Error parsing loggedUserJson:", error);
+      dispatch(saveUserInfo(null));
     }
   }, []);
 
-  // useEffect(() => {
-  //   // Intentamos obtener el usuario del localStorage
-  //   const loggedUserJson = window.localStorage.getItem("loggedNoteappUser");
-
-  //   // Si no hay nada en el localStorage, aseguramos que user sea null
-  //   if (!loggedUserJson) {
-  //     setUser(null);
-  //     return;
-  //   }
-
-  //   try {
-  //     // Intentamos parsear el JSON
-  //     const user = JSON.parse(loggedUserJson);
-  //     setUser(user);
-  //     setToken(user?.token);
-  //   } catch (error) {
-  //     // Si hay un error parseando, mostramos un mensaje en la consola y ponemos user como null
-  //     console.error("Error parsing loggedUserJson:", error);
-  //     setUser(null);
-  //   }
-  // }, []);
-
   return (
     <div>
-      <h2>blogs extended</h2>
+      <h2>Blogs extended</h2>
       <span>{errorMsg && errorMsg}</span>
       {showNotification && <Notification />}
       {userRedux != null && (
@@ -175,7 +173,7 @@ const App = () => {
           <button
             onClick={() => {
               window.localStorage.clear();
-              //setUser(null);
+
               dispatch(saveUserInfo(null));
             }}
           >
@@ -188,6 +186,7 @@ const App = () => {
           <Login handleLogin={handleLogin} />
         </Togglable>
       )}
+
       {userRedux && (
         <Togglable buttonLabel="new blog" ref={notesFormRef}>
           <BlogForm handleCreate={handleCreateBlog} />

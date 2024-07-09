@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 /*
  La función que crea el componente está envuelta dentro de una llamada a la función forwardRef.
  De esta manera el componente puede acceder a la referencia que le fue asignada.
@@ -27,8 +27,11 @@ const Togglable = forwardRef((props, refs) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility} id="toggable">{props.buttonLabel}</button>
+        <button onClick={toggleVisibility} id="toggable">
+          {props.buttonLabel}
+        </button>
       </div>
+
       <div style={showWhenVisible} className="togglableContent">
         {props.children}
         <button onClick={toggleVisibility}>cancel</button>
@@ -38,7 +41,6 @@ const Togglable = forwardRef((props, refs) => {
 });
 export default Togglable;
 
-
 Togglable.propTypes = {
-  buttonLabel: PropTypes.string.isRequired
-}
+  buttonLabel: PropTypes.string.isRequired,
+};
