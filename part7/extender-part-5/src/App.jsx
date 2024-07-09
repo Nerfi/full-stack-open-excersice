@@ -14,6 +14,7 @@ import Notification from "./components/Notification";
 import { useSelector, useDispatch } from "react-redux";
 //importing the action creator from the file were it was added
 import { toggleNotification } from "./redux/reducers/notificationSlice";
+import { saveUserInfo } from "./redux/reducers/userSlice";
 //redux thunk
 import {
   fetchBlogs,
@@ -23,7 +24,6 @@ import {
 } from "./redux/reducers/blogSlice";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [errorMsg, setErrorMessage] = useState(null);
   const notesFormRef = useRef();
@@ -31,6 +31,7 @@ const App = () => {
   //redux hooks
   const showNotification = useSelector((state) => state.notification.show);
   const blogsThunk = useSelector((state) => state.blogs.blogs);
+  const userRedux = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
 
@@ -39,7 +40,9 @@ const App = () => {
       const user = await login({ username, password });
       window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
       setToken(user.token);
-      setUser(user);
+      //setUser(user);
+      //redux
+      dispatch(saveUserInfo(user));
     } catch (error_msg) {
       setErrorMessage("Wrong credentials");
       setTimeout(() => {
@@ -124,13 +127,16 @@ const App = () => {
     //if (loggedUserJson === undefined) return;
 
     if (!loggedUserJson) {
-      setUser(null);
+      //setUser(null);
+      dispatch(saveUserInfo(null));
       return;
     }
 
     if (loggedUserJson && loggedUserJson) {
       const user = JSON.parse(loggedUserJson);
-      setUser(user);
+      //setUser(user);
+      //redux part 7
+      dispatch(saveUserInfo(user));
 
       setToken(user?.token);
     }
@@ -163,30 +169,31 @@ const App = () => {
       <h2>blogs extended</h2>
       <span>{errorMsg && errorMsg}</span>
       {showNotification && <Notification />}
-      {user != null && (
+      {userRedux != null && (
         <>
-          {user.name}{" "}
+          {userRedux.name}{" "}
           <button
             onClick={() => {
               window.localStorage.clear();
-              setUser(null);
+              //setUser(null);
+              dispatch(saveUserInfo(null));
             }}
           >
             log out
           </button>
         </>
       )}
-      {user === null && (
+      {userRedux === null && (
         <Togglable buttonLabel="login">
           <Login handleLogin={handleLogin} />
         </Togglable>
       )}
-      {user && (
+      {userRedux && (
         <Togglable buttonLabel="new blog" ref={notesFormRef}>
           <BlogForm handleCreate={handleCreateBlog} />
         </Togglable>
       )}
-      {user != null &&
+      {userRedux != null &&
         blogsThunk.map((blog) => (
           <div key={blog.id} className="blogs">
             <Blog
