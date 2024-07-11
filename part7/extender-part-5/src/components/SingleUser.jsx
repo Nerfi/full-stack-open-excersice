@@ -12,7 +12,7 @@ export default function SingleUser() {
   return (
     <div>
       <h2>{user.username}</h2>
-      <h3>Blogs added</h3>
+      <h3>Added blogs</h3>
       <ul>
         {user.blogs.map((blog) => (
           <li key={blog.id}>
