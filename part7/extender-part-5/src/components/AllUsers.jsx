@@ -7,6 +7,8 @@ export default function AllUsers() {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.users);
 
+  console.log(users, "USERS ");
+
   useEffect(() => {
     dispatch(fetchAllUsers());
   }, []);

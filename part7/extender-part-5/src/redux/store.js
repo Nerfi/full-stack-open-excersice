@@ -1,12 +1,41 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import NotificatioReducer from "./reducers/notificationSlice";
 import blogSlice from "./reducers/blogSlice";
 import userSlice from "./reducers/userSlice";
+//
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  persistStore,
+  persistReducer,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage"; // Usa almacenamiento local para persistir el estado
 
-export const store = configureStore({
-  reducer: {
-    notification: NotificatioReducer,
-    blogs: blogSlice,
-    user: userSlice,
-  },
+// Configuración del persist
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["user"], // Lista blanca de reducers a persistir
+};
+//test
+const rootReducer = combineReducers({
+  notification: NotificatioReducer,
+  blogs: blogSlice,
+  user: userSlice,
 });
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+export const persistor = persistStore(store);

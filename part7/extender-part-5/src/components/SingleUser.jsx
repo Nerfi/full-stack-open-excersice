@@ -1,16 +1,23 @@
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+//
+import { useSelector } from "react-redux";
 
 export default function SingleUser() {
-  const user = useLoaderData();
+  const params = useParams();
+
+  const userRedux = useSelector((state) => state.user.users);
+  const user = userRedux.find((user) => user.id === params.id);
 
   return (
     <div>
-      <h2>{user.payload.username}</h2>
+      <h2>{user.username}</h2>
       <h3>Blogs added</h3>
       <ul>
-        {user.payload.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+        {user.blogs.map((blog) => (
+          <li key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </li>
         ))}
       </ul>
     </div>

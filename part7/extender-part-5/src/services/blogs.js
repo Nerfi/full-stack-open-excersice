@@ -40,15 +40,25 @@ const createBlogPost = async (blogPost) => {
 };
 
 const addLikeToPost = async (blogId, blogDataUpdate) => {
+  console.log(blogId, "DATOS en blog.js");
+  console.log("-----------------------------------------");
+  //console.log(blogDataUpdate, "DATA PASS");
+
+  console.log(token, "TOKEN qlq");
   const config = {
     headers: { Authorization: token },
   };
+
+  console.log(config, "CONFIG ");
   try {
+    console.log("LLEGO AKA");
     const updatedRes = await axios.put(
       `${baseUrl}/${blogId}`,
       blogDataUpdate,
       config
     );
+
+    console.log("AQUI LLEGO?");
     return updatedRes.data;
   } catch (error) {
     console.log(error);
@@ -66,6 +76,16 @@ const deleteBlogPost = async (blogId) => {
     console.log(error);
   }
 };
+
+const getSingleBlog = async (blogId) => {
+  try {
+    const getBlog = await axios.get(`${baseUrl}/${blogId}`);
+    return getBlog.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 export {
   getAll,
   login,
@@ -73,4 +93,5 @@ export {
   createBlogPost,
   addLikeToPost,
   deleteBlogPost,
+  getSingleBlog,
 };

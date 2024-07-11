@@ -4,10 +4,12 @@ import {
   createBlogPost,
   addLikeToPost,
   deleteBlogPost,
+  getSingleBlog,
 } from "../../services/blogs";
 
 const initialState = {
   blogs: [],
+  blog: {},
 };
 
 const blogsSlice = createSlice({
@@ -25,8 +27,16 @@ const blogsSlice = createSlice({
     });
 
     builder.addCase(addLikeToBlog.fulfilled, (state, action) => {
+      const updatedBlog = action.payload;
+
+      // Actualiza el blog individual si coincide con el blog actualizado
+      if (state.blog && state.blog.id === updatedBlog.id) {
+        state.blog = updatedBlog;
+      }
+
+      // Actualiza el array de blogs
       state.blogs = state.blogs.map((blog) =>
-        blog.id !== action.payload.id ? blog : action.payload
+        blog.id !== updatedBlog.id ? blog : updatedBlog
       );
     });
 
@@ -34,6 +44,10 @@ const blogsSlice = createSlice({
       state.blogs = state.blogs.filter((blog) => {
         return blog.id !== action.payload.id;
       });
+    });
+
+    builder.addCase(getSingleBlogById.fulfilled, (state, action) => {
+      state.blog = action.payload;
     });
   },
 });
@@ -70,8 +84,10 @@ export const addLikeToBlog = createAsyncThunk(
     //PARA SABER PORQUE HEMOS HECHO LO QUE HEMOS HECHO EN ESTA FUNCION , PASARLE SOLO UN PARAMETRO A ASYNC (DATA)
     //https://stackoverflow.com/questions/64742747/how-do-you-pass-arguments-to-createasyncthunk-in-redux-toolkit
     const { id } = data;
+
     try {
       const addLikeToBlogPost = await addLikeToPost(id, data);
+      console.log("HOLA x2");
       return addLikeToBlogPost;
       //updating the state, this is one way of doing it, here is the other one done in the exercise of full stack open: https://github.com/Nerfi/full-stack-open-excersice/blob/master/part6/redux-anecdotes/src/reducers/anecdotesReducer.js
     } catch (error) {
@@ -89,6 +105,21 @@ export const deleteSingleBlog = createAsyncThunk(
       return deleteBlog;
     } catch (error) {
       console.log("error deleting brlog");
+      throw error;
+    }
+  }
+);
+
+export const getSingleBlogById = createAsyncThunk(
+  "blogs/getSingle",
+  async (id) => {
+    try {
+      const singleBlog = await getSingleBlog(id);
+      console.log(singleBlog, "singleblog lqlqlql");
+
+      return singleBlog;
+    } catch (error) {
+      console.log("error getting single  brlog");
       throw error;
     }
   }

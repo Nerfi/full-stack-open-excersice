@@ -5,7 +5,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addLikeToBlog } from "../redux/reducers/blogSlice";
 
-const Blog = ({ blog, handleUpdateblog, handleDelete, user }) => {
+const Blog = ({ blog, handleDelete, user }) => {
   const [likes, setLikes] = useState(0);
   const dispatch = useDispatch();
 
@@ -61,7 +61,7 @@ const Blog = ({ blog, handleUpdateblog, handleDelete, user }) => {
               <li> {blog.author}</li>
               <li className="url"> {blog.url}</li>
               <li className="likes">
-                likes: {blog.likes}
+                likess: {blog.likes}
                 <button onClick={handleAddLike} id="like">
                   Like
                 </button>
