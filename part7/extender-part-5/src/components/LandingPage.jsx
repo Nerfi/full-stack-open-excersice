@@ -24,7 +24,6 @@ export default function LandingPage() {
   const blogsThunk = useSelector((state) => state.blogs.blogs);
 
   const userRedux = useSelector((state) => state.user.user);
-  // console.log(userRedux, "USER REDUX"); works
 
   const dispatch = useDispatch();
 
@@ -119,20 +118,7 @@ export default function LandingPage() {
       <h2>Blogs extended</h2>
       <span>{errorMsg && errorMsg}</span>
       {showNotification && <Notification />}
-      {userRedux != null && (
-        <>
-          {userRedux.name}{" "}
-          <button
-            onClick={() => {
-              window.localStorage.clear();
-
-              dispatch(saveUserInfo(null));
-            }}
-          >
-            log out
-          </button>
-        </>
-      )}
+      {userRedux != null && <>{userRedux.name} </>}
       {userRedux === null && (
         <Togglable buttonLabel="login">
           <Login handleLogin={handleLogin} />

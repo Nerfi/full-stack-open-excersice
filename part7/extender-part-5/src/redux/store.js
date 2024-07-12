@@ -19,7 +19,7 @@ import storage from "redux-persist/lib/storage"; // Usa almacenamiento local par
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user"], // Lista blanca de reducers a persistir
+  whitelist: ["user", "blogs"], // Lista blanca de reducers a persistir, estos son los slices(estados) que persistiran
 };
 //test
 const rootReducer = combineReducers({

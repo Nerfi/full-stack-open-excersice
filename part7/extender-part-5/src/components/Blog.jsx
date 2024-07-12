@@ -4,6 +4,7 @@ import axios from "axios";
 //redux thunk
 import { useDispatch } from "react-redux";
 import { addLikeToBlog } from "../redux/reducers/blogSlice";
+import { Link } from "react-router-dom";
 
 const Blog = ({ blog, handleDelete, user }) => {
   const [likes, setLikes] = useState(0);
@@ -53,7 +54,8 @@ const Blog = ({ blog, handleDelete, user }) => {
 
   return (
     <div style={blogStyle} className="singleNoteComponent">
-      {blog.title}
+      <Link to={`/blog/${blog.id}`}>{blog.title}</Link>
+
       <Togglable buttonLabel="view">
         <div style={{ border: "solid 2px black" }}>
           <div>

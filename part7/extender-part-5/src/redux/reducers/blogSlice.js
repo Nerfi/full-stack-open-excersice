@@ -5,6 +5,7 @@ import {
   addLikeToPost,
   deleteBlogPost,
   getSingleBlog,
+  createCommentToblog,
 } from "../../services/blogs";
 
 const initialState = {
@@ -92,6 +93,22 @@ export const addLikeToBlog = createAsyncThunk(
       //updating the state, this is one way of doing it, here is the other one done in the exercise of full stack open: https://github.com/Nerfi/full-stack-open-excersice/blob/master/part6/redux-anecdotes/src/reducers/anecdotesReducer.js
     } catch (error) {
       console.error("Error liking blogs:", error);
+      throw error;
+    }
+  }
+);
+
+export const createComment = createAsyncThunk(
+  "blogs/addComment",
+  async (data) => {
+    const { id } = data;
+    //aqui text no esta llegando, revisar el problema
+    console.log(data.text, "DATA send ");
+    try {
+      const commentAdded = await createCommentToblog(id, data);
+      return commentAdded;
+    } catch (error) {
+      console.error("Error comenting blogs:", error);
       throw error;
     }
   }

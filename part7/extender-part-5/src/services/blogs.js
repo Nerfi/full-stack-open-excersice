@@ -26,6 +26,25 @@ const setToken = (newToken) => {
   token = `Bearer ${newToken}`;
 };
 
+const createCommentToblog = async (id, comment) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  console.log(id, "id in createCommentBlog in services");
+  try {
+    const commentReq = await axios.post(
+      `${baseUrl}/${id}/comments`,
+      comment,
+      config
+    );
+    return commentReq.data;
+  } catch (error) {
+    console.log(error, "error in create comment");
+    throw error;
+  }
+};
+
 const createBlogPost = async (blogPost) => {
   const config = {
     headers: { Authorization: token },
@@ -49,16 +68,13 @@ const addLikeToPost = async (blogId, blogDataUpdate) => {
     headers: { Authorization: token },
   };
 
-  console.log(config, "CONFIG ");
   try {
-    console.log("LLEGO AKA");
     const updatedRes = await axios.put(
       `${baseUrl}/${blogId}`,
       blogDataUpdate,
       config
     );
 
-    console.log("AQUI LLEGO?");
     return updatedRes.data;
   } catch (error) {
     console.log(error);
@@ -94,4 +110,5 @@ export {
   addLikeToPost,
   deleteBlogPost,
   getSingleBlog,
+  createCommentToblog,
 };
