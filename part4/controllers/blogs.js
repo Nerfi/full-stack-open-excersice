@@ -1,9 +1,9 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/blogModel");
+const Comment = require("../models/commentModel");
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
-//testing
-const blogList = require("../utils/list_helper");
+
 //app.use("/api/blogs", blogRoutes); esta linea ki que hace es poner /api/blogs como prefijo de cualquiera
 // de nuestras rutas
 const tokenExtractorMiddleware = require("../utils/middleware");
@@ -59,6 +59,46 @@ blogRouter.post("/", tokenExtractorMiddleware, async (req, res, next) => {
   }
 });
 
+//api/blogs/:id/comments.
+
+blogRouter.post(
+  "/:id/comments",
+  tokenExtractorMiddleware,
+  async (req, res, next) => {
+    const decodeToken = jwt.verify(req.token, process.env.SECRET);
+    const blogId = req.params.id;
+
+    const { text } = req.body;
+
+    if (!decodeToken.id) {
+      return res.status(401).send({ error: "token invalid" });
+    }
+    //ommit user so far
+
+    try {
+      //find the blog on which to place the comment
+      const blog = await Blog.findById(blogId).populate("comments", {
+        text: 1,
+      });
+      if (!blog) {
+        return res.status(404).send({ error: "Blog not found" });
+      }
+      const comment = new Comment({
+        text: text,
+      });
+      await comment.save();
+      //push the comment to the array
+      blog.comments.push(comment);
+      //console.log(blog, "single blog");
+      await blog.save();
+
+      return res.status(201).json(blog);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 blogRouter.put("/:id", tokenExtractorMiddleware, async (req, res, next) => {
   //update just the likes of the app
   //finding the user
@@ -95,7 +135,11 @@ blogRouter.put("/:id", tokenExtractorMiddleware, async (req, res, next) => {
 blogRouter.get("/:id", async (req, res, next) => {
   try {
     const idToSearch = req.params.id;
-    const singleBlog = await Blog.findById(idToSearch);
+    const singleBlog = await Blog.findById(idToSearch)
+      .populate("user", {
+        username: 1,
+      })
+      .populate("comments", { text: 1 });
     if (!singleBlog) {
       res.status(400).end();
     }
