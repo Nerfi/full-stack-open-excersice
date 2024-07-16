@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addLikeToBlog } from "../redux/reducers/blogSlice";
-import { addLikeToPost } from "../services/blogs";
+import {
+  addLikeToBlog,
+  getSingleBlogComments,
+} from "../redux/reducers/blogSlice";
 import { setToken } from "../services/blogs";
 import { useParams } from "react-router-dom";
 import { createComment } from "../redux/reducers/blogSlice";
+import Comments from "./Comments";
+
 export default function SingleBLog() {
   const dispatch = useDispatch();
   const [comment, setComment] = useState("");
@@ -14,7 +17,8 @@ export default function SingleBLog() {
   const blogs = useSelector((state) => state.blogs.blogs);
 
   const selectedBlog = blogs.find((blog) => blog.id === id);
-  //  const [likes, setLikes] = useState(blog.payload.likes);
+
+  const comments = useSelector((state) => state.blogs.comments);
 
   const userRedux = useSelector((state) => state.user.user);
 
@@ -23,6 +27,11 @@ export default function SingleBLog() {
       setToken(userRedux.token);
     }
   }, [userRedux]);
+
+  //get the comments
+  useEffect(() => {
+    dispatch(getSingleBlogComments(selectedBlog.id));
+  }, []);
 
   const handleAddLike = async (e) => {
     const updatedLikes = likes + 1;
@@ -40,15 +49,21 @@ export default function SingleBLog() {
 
   const handleAddComment = (e) => {
     e.preventDefault();
+
+    setComment(e.target.value);
+  };
+
+  const submmitComment = (e) => {
+    e.preventDefault();
     const dataToSend = {
       id: selectedBlog.id,
       text: comment,
     };
 
-    console.log(e.target.value, "valor");
-    setComment(e.target.value);
-
     dispatch(createComment(dataToSend));
+    //
+    setComment(""); // Limpiar el campo de comentario después de agregar
+    dispatch(getSingleBlogComments(selectedBlog.id));
   };
   return (
     <div>
@@ -63,7 +78,7 @@ export default function SingleBLog() {
       </div>
       <span>added by {selectedBlog.user.username}</span>
       <div>Leave a comment</div>
-      <form>
+      <form onSubmit={submmitComment}>
         <label>Comment !</label>
         <input
           type="text"
@@ -71,7 +86,9 @@ export default function SingleBLog() {
           valeu={comment}
           onChange={handleAddComment}
         />
+        <button type="submit">Create</button>
       </form>
+      <Comments comments={comments} />
     </div>
   );
 }

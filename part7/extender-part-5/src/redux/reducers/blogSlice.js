@@ -6,11 +6,14 @@ import {
   deleteBlogPost,
   getSingleBlog,
   createCommentToblog,
+  getBlogWithComments,
 } from "../../services/blogs";
 
 const initialState = {
   blogs: [],
   blog: {},
+  //comments state, maybe its not the place, just try it
+  comments: [],
 };
 
 const blogsSlice = createSlice({
@@ -50,6 +53,14 @@ const blogsSlice = createSlice({
     builder.addCase(getSingleBlogById.fulfilled, (state, action) => {
       state.blog = action.payload;
     });
+
+    builder.addCase(getSingleBlogComments.fulfilled, (state, action) => {
+      state.comments = action.payload;
+    });
+    builder.addCase(createComment.fulfilled, (state, action) => {
+      //console.log(action.payload, "payload in createComment funciton");
+      state.comments.push(action.payload);
+    });
   },
 });
 
@@ -88,11 +99,23 @@ export const addLikeToBlog = createAsyncThunk(
 
     try {
       const addLikeToBlogPost = await addLikeToPost(id, data);
-      console.log("HOLA x2");
       return addLikeToBlogPost;
       //updating the state, this is one way of doing it, here is the other one done in the exercise of full stack open: https://github.com/Nerfi/full-stack-open-excersice/blob/master/part6/redux-anecdotes/src/reducers/anecdotesReducer.js
     } catch (error) {
       console.error("Error liking blogs:", error);
+      throw error;
+    }
+  }
+);
+
+export const getSingleBlogComments = createAsyncThunk(
+  "/blogs/getComments",
+  async (id) => {
+    try {
+      const comments = await getBlogWithComments(id);
+      return comments;
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -106,7 +129,8 @@ export const createComment = createAsyncThunk(
     console.log(data.text, "DATA send ");
     try {
       const commentAdded = await createCommentToblog(id, data);
-      return commentAdded;
+      //console.log(commentAdded.comments, "comment added");
+      return commentAdded.comments[commentAdded.comments.length - 1];
     } catch (error) {
       console.error("Error comenting blogs:", error);
       throw error;

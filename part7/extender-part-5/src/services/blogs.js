@@ -31,7 +31,6 @@ const createCommentToblog = async (id, comment) => {
     headers: { Authorization: token },
   };
 
-  console.log(id, "id in createCommentBlog in services");
   try {
     const commentReq = await axios.post(
       `${baseUrl}/${id}/comments`,
@@ -41,6 +40,16 @@ const createCommentToblog = async (id, comment) => {
     return commentReq.data;
   } catch (error) {
     console.log(error, "error in create comment");
+    throw error;
+  }
+};
+
+const getBlogWithComments = async (id) => {
+  try {
+    const blogWithComments = await axios.get(`${baseUrl}/${id}/comments`);
+    return blogWithComments.data.comments;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -59,11 +68,8 @@ const createBlogPost = async (blogPost) => {
 };
 
 const addLikeToPost = async (blogId, blogDataUpdate) => {
-  console.log(blogId, "DATOS en blog.js");
-  console.log("-----------------------------------------");
   //console.log(blogDataUpdate, "DATA PASS");
 
-  console.log(token, "TOKEN qlq");
   const config = {
     headers: { Authorization: token },
   };
@@ -111,4 +117,5 @@ export {
   deleteBlogPost,
   getSingleBlog,
   createCommentToblog,
+  getBlogWithComments,
 };
