@@ -99,6 +99,62 @@ blogRouter.post(
   }
 );
 
+blogRouter.get("/:id/comments", async (req, res) => {
+  const idToSearch = req.params.id;
+
+  try {
+    const commentsBlogs = await Blog.findById(idToSearch).populate("comments", {
+      text: 1,
+    });
+
+    console.log(commentsBlogs, "blog commentes");
+
+    if (!commentsBlogs) {
+      return res
+        .status(400)
+        .send({ error: "Error happend searching for commetns" });
+    }
+
+    return res.status(200).json(commentsBlogs);
+  } catch (error) {
+    next(error);
+  }
+});
+
+blogRouter.get(
+  "/:id/comments",
+  tokenExtractorMiddleware,
+  async (req, res, next) => {
+    console.log("HOLA");
+    // const decodeToken = jwt.verify(req.token, process.env.SECRET);
+    // if (!decodeToken.id) {
+    //   return res.status(401).send({ error: "token invalid" });
+    // }
+    // const idToSearch = req.params.id;
+
+    // try {
+    //   const commentsBlogs = await Blog.findById(idToSearch).populate(
+    //     "comments",
+    //     {
+    //       text: 1,
+    //     }
+    //   );
+
+    //   console.log(commentsBlogs, "blog commentes");
+
+    //   if (!commentsBlogs) {
+    //     return res
+    //       .status(400)
+    //       .send({ error: "Error happend searching for commetns" });
+    //   }
+
+    //   return res.status(200).json(commentsBlogs);
+    // } catch (error) {
+    //   next(error);
+    // }
+  }
+);
+
 blogRouter.put("/:id", tokenExtractorMiddleware, async (req, res, next) => {
   //update just the likes of the app
   //finding the user
