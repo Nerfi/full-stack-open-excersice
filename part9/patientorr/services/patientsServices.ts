@@ -1,5 +1,6 @@
 import patientsData from "../data/patients";
-import { PatientPublic } from "../types/types";
+import { PatientPublic, Patient, NewPatientEntry } from "../types/types";
+import { v4 as uuidv4 } from "uuid";
 
 const getPatients = (): PatientPublic[] => {
   //excluyendo nosotros los tipos que no queremos mostrar, aun no entiendo porque
@@ -13,7 +14,18 @@ const getPatients = (): PatientPublic[] => {
   }));
 };
 
+const addNewPatient = (object: NewPatientEntry): Patient => {
+  const idCreated = uuidv4();
+  const newPatient = {
+    ...object,
+    id: idCreated,
+  };
+
+  //testing to add in data
+  patientsData.push(newPatient);
+  return newPatient;
+};
 export default {
   getPatients,
+  addNewPatient,
 };
-// lo dejamos aqui https://fullstackopen.com/es/part9/tipando_una_aplicacion_express
