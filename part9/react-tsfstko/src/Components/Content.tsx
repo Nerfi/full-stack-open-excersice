@@ -1,26 +1,15 @@
-interface IContent {
-  name: string;
-  exerciseCount: number;
-}
+import Part from "./Part";
+import { CoursePart } from "../App";
+
 interface propsI {
-  courseParts: IContent[];
+  courseParts: CoursePart[];
 }
 
 export default function Content({ courseParts }: propsI) {
   return (
     <div>
       Content
-      {courseParts.map((course) => {
-        return (
-          <>
-            <ul>
-              <li>
-                {course.name} {course.exerciseCount}
-              </li>
-            </ul>
-          </>
-        );
-      })}
+      <Part courseParts={courseParts} />
     </div>
   );
 }
