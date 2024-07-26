@@ -35,6 +35,7 @@ router.get("/:id", async (req, res) => {
 //  console.log(id, "THE ID ")// works
   const allPatients = data;
   console.log(allPatients)
+  //añadir una funcion a los servicios como en la ruta de arriba post
   const selectedPatient = allPatients.find(patient => patient.id === id)
   res.send(selectedPatient);
   
