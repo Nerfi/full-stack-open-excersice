@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Patient, addPatientType } from "../types/types";
 import { postPatient } from "../services";
+import Error from "./Error";
+
 export default function AddPatientForm() {
+  const [error, setError] = useState("");
   const [fields, setFields] = useState<addPatientType>({
     name: "",
     dateOfBirth: "",
@@ -15,8 +18,10 @@ export default function AddPatientForm() {
     e.preventDefault();
     try {
       await postPatient(fields);
-    } catch (error) {
-      console.error("Error adding patient:", error);
+    } catch (error: unknown | any) {
+      setError(error.response.data.error as string); // maybe not the best idea
+
+      console.error("Error adding patient:", error.response.data.error);
     }
   };
 
@@ -32,6 +37,7 @@ export default function AddPatientForm() {
   };
   return (
     <div>
+      {error && <Error error={error} />}
       <form
         onSubmit={submmitPerson}
         id="patientForm"
