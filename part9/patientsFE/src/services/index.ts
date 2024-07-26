@@ -27,4 +27,20 @@ const postPatient = async (patient: addPatientType): Promise<IPatient| undefined
   }
 };
 
-export { getAllPatients, postPatient };
+const getSinglePatient = async (id: string) => {
+  try {
+    const singlePatient = await axios.get<IPatient>(`${URL}/${id}`)
+    return singlePatient.data;
+    
+  } catch (error) {
+    if(axios.isAxiosError(error)) {
+      console.log("axios error " + error)
+      throw error;
+    }
+
+    console.error("Error getting patient:", error);
+  }
+ 
+}
+
+export { getAllPatients, postPatient , getSinglePatient};

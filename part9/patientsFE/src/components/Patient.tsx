@@ -1,4 +1,5 @@
 import { IPatient } from "../types/types";
+import { Link } from "react-router-dom";
 interface IProps {
   patients: IPatient[];
 }
@@ -14,7 +15,9 @@ export default function Patient({ patients }: IProps) {
             </span>
             <br />
             <span>{patient.gender}</span>
-            <span>{patient.name}</span>
+            <span>
+              <Link to={`/patient/${patient.id}`}>{patient.name}</Link>{" "}
+            </span>
             <span>{patient.occupation}</span>
           </div>
         );
