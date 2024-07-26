@@ -8,14 +8,26 @@ router.get("/", (_req, res) => {
   res.send(patientsServices.getPatients());
 });
 
-router.post("/", (req, res) => {
-  //TODO: LLAMAR A LA FUNCION QUE CORRESPONDA DE SERVICES
+router.post("/", async (req, res) => {
+  try {
+    // Transformar y validar datos de entrada
+    const newPatientEntry = toNewPatient(req.body);
+    
+    // Llamar al servicio para añadir un nuevo paciente
+    const addedPatient = await patientsServices.addNewPatient(newPatientEntry);
+    
+    // Enviar respuesta con el nuevo paciente añadido
+    res.status(201).json(addedPatient);
+  } catch (error: unknown) {
+    console.error("Error al añadir nuevo paciente:", error);
+    if(error instanceof Error) {
+      res.status(400).json({ error: error.message +" erro thrown"});
+    }
 
-  const newPatientEntry = toNewPatient(req.body);
-
-  const addPatient = patientsServices.addNewPatient(newPatientEntry);
-
-  res.json(addPatient);
+    res.status(400).json({error: "somethign went wrong"})
+    // Enviar una respuesta de error con el estado apropiado
+    
+  }
 });
 
 export default router;

@@ -7,6 +7,7 @@ const toNewPatient = (object: unknown): NewPatientEntry => {
     throw new Error("Incorrect or missing data");
   }
 
+
   if (
     "name" in object &&
     "dateOfBirth" in object &&
