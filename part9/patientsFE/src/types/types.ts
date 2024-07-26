@@ -4,6 +4,7 @@ export interface IPatient {
   id: String;
   name: String;
   occupation: String;
+  ssn: string
 }
 
 export enum Patient {
