@@ -13,7 +13,8 @@ const toNewPatient = (object: unknown): NewPatientEntry => {
     "dateOfBirth" in object &&
     "ssn" in object &&
     "gender" in object &&
-    "occupation" in object
+    "occupation" in object &&
+    "entries" in object
   ) {
     const checkObjectValues: NewPatientEntry = {
       name: parseName(object.name),
@@ -21,6 +22,7 @@ const toNewPatient = (object: unknown): NewPatientEntry => {
       ssn: parseName(object.ssn),
       gender: parseGender(object.gender),
       occupation: parseName(object.occupation),
+      entries: parseArray(object.entries) 
     };
     return checkObjectValues;
   }
@@ -32,6 +34,18 @@ export default toNewPatient;
 
 //parser function in order to check that the data in object POSt req
 //is what we want it to be
+
+const isArray = (value: unknown): value is Array<any> => {
+  return Array.isArray(value);
+};
+
+const parseArray =(arr:unknown ): Array<any> => {
+  if(!arr || !isArray(arr)) {
+    throw new Error("incorrect Array")
+  }
+
+  return arr;
+}
 
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {

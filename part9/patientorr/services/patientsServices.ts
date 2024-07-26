@@ -5,12 +5,13 @@ import { v4 as uuidv4 } from "uuid";
 const getPatients = (): PatientPublic[] => {
   //excluyendo nosotros los tipos que no queremos mostrar, aun no entiendo porque
 
-  return patientsData.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+  return patientsData.map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
     id,
     name,
     dateOfBirth,
     gender,
     occupation,
+    entries
   }));
 };
 
