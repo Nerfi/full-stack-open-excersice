@@ -10,6 +10,7 @@ app.get("/hello", (_req, res) => {
 });
 
 app.get("/bmi", (req, res) => {
+  // obteneindo los parametros de la query enviada: http://localhost:3003/bmi?height=180&weight=72
   const peso = Number(req.query.weight);
   const altura = Number(req.query.height);
   const bodyMass = bmi(peso, altura);

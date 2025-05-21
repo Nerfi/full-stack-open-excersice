@@ -31,16 +31,16 @@ function calculateExercises(horas: number[], objetivo: number): outcome {
 
 export default calculateExercises;
 
-// const args = process.argv.slice(2);
-// const arrayString = args[3];
+//  const args = process.argv.slice(2);
+//  const arrayString = args[3];
 
-// //console.log(process.argv, "ARGV")
+// // //console.log(process.argv, "ARGV")
 
-// //console.log(process.argv[1], "string arrat");
-// //const hoursArray = JSON.parse(arrayString);
-// const target = Number(args[2]);
+// // //console.log(process.argv[1], "string arrat");
+// const hoursArray = JSON.parse(arrayString);
+//  const target = Number(args[2]);
 
-//const secondArgument = Number(process.argv[3]);
+// const secondArgument = Number(process.argv[3]);
 try {
   //console.log(calculateExercises([ 2 ,1, 0, 2, 4.5, 0, 3, 1, 0], 4));
 } catch (error: unknown) {
