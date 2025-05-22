@@ -45,3 +45,11 @@ export default function Part({ courseParts }: propsI) {
     </ul>
   );
 }
+
+
+/*
+Una forma práctica de estrechar esta clase de tipos en TypeScript es mediante el uso de expresiones switch case. 
+Una vez que TypeScript haya inferido que una variable es de tipo unión
+ y que cada tipo en la unión contiene un determinado atributo literal (en nuestro caso kind), podemos usarlo como un identificador de tipo.
+ Luego podemos construir un switch case alrededor de este atributo y TypeScript sabrá qué atributos están disponibles dentro de cada bloque de case
+ */
