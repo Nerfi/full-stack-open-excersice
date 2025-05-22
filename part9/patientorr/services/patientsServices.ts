@@ -3,7 +3,7 @@ import { PatientPublic, Patient, NewPatientEntry } from "../types/types";
 import { v4 as uuidv4 } from "uuid";
 
 const getPatients = (): PatientPublic[] => {
-  //excluyendo nosotros los tipos que no queremos mostrar, aun no entiendo porque
+  //excluyendo nosotros los tipos que no queremos mostrar, aun no entiendo porque, creo que por seguridad a la hora de no mostrar data sensible ni enviarla al front-end
 
   return patientsData.map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
     id,

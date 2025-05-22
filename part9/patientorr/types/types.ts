@@ -1,7 +1,7 @@
 export type Diagnose = {
-  code: String;
-  name: String;
-  latin?: String;
+  code: string;
+  name: string;
+  latin?: string;
 };
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Entry {
@@ -9,12 +9,12 @@ export interface Entry {
 }
 
 export type Patient = {
-  id: String;
-  name: String;
-  dateOfBirth: String;
-  ssn: String;
+  id: string;
+  name: string;
+  dateOfBirth: string;
+  ssn: string;
   gender: Gender;
-  occupation: String;
+  occupation: string;
   entries: Entry[];
 };
 
@@ -27,4 +27,4 @@ export enum Gender {
   Male = "male",
   Female = "female",
   Other = "other",
-};
+}

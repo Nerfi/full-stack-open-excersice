@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/", (_req, res) => {
     //always call the function 
-    res.send(diagnosesServices.getDiagnoses())
-})
+    res.send(diagnosesServices.getDiagnoses());
+});
 
 export default router;

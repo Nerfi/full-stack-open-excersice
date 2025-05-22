@@ -9,13 +9,14 @@ router.get("/", (_req, res) => {
   res.send(patientsServices.getPatients());
 });
 
+// eslint-disable-next-line @typescript-eslint/require-await
 router.post("/", async (req, res) => {
   try {
     // Transformar y validar datos de entrada
     const newPatientEntry = toNewPatient(req.body);
 
     // Llamar al servicio para añadir un nuevo paciente
-    const addedPatient = await patientsServices.addNewPatient(newPatientEntry);
+    const addedPatient =  patientsServices.addNewPatient(newPatientEntry);
 
     // Enviar respuesta con el nuevo paciente añadido
     return res.status(201).json(addedPatient);
@@ -29,15 +30,15 @@ router.post("/", async (req, res) => {
   }
 });
 
-
+// eslint-disable-next-line @typescript-eslint/require-await
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
 //  console.log(id, "THE ID ")// works
   const allPatients = data;
-  console.log(allPatients)
+  console.log(allPatients);
   //añadir una funcion a los servicios como en la ruta de arriba post
-  const selectedPatient = allPatients.find(patient => patient.id === id)
+  const selectedPatient = allPatients.find(patient => patient.id === id);
   res.send(selectedPatient);
   
-})
+});
 export default router;

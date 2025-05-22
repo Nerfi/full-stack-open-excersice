@@ -41,11 +41,11 @@ const isArray = (value: unknown): value is Array<any> => {
 
 const parseArray =(arr:unknown ): Array<any> => {
   if(!arr || !isArray(arr)) {
-    throw new Error("incorrect Array")
+    throw new Error("incorrect Array");
   }
 
   return arr;
-}
+};
 
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
