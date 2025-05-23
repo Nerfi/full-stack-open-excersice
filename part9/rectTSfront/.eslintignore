@@ -1,0 +1,17 @@
+# Ignorar dependencias
+node_modules
+
+# Ignorar archivos de salida
+dist
+build
+coverage
+
+# Ignorar configuración y archivos del sistema
+*.config.js
+*.config.cjs
+*.config.ts
+*.log
+.DS_Store
+
+# Ignorar otras cosas personalizadas
+public
