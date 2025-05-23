@@ -17,6 +17,12 @@ const fetchDiaries = async () => {
 }
 
 
+const createNewDiary = () =>   {
+    // TODO add logic 
+}
+
+
 export {
     fetchDiaries
 }
+
