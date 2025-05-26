@@ -10,6 +10,7 @@ export interface IDiaries {
 export enum Visibility {
     Poor = "poor",
     Good = "good",
+    Default = " "
 
 }
 
@@ -17,6 +18,14 @@ export enum Weather {
     Cloudy = "cloudy",
     Windy = "windy",
     Sunny = "sunny",
-    Rainy = "rainy"
+    Rainy = "rainy",
+    Default = ""
 }
 
+
+interface AddNewDiary extends IDiaries {
+    comment: string
+}
+
+
+export type NewDiary = Omit<AddNewDiary, "id">
