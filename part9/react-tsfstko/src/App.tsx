@@ -102,4 +102,3 @@ const App = () => {
 export default App;
 
 
-// https://fullstackopen.com/es/part9/react_con_tipos -- Aplicación de React con estado
